@@ -98,14 +98,14 @@
             padding: 0 15px;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: max-height 0.2s ease-out; /* Accéléré de 0.3s à 0.2s */
             background-color: #f1f8e9;
         }
         
         .term.active .term-content {
-            max-height: 1500px; /* Increased to accommodate images */
+            max-height: 1000px; /* Réduit de 1500px à 1000px */
             padding: 15px;
-            transition: max-height 0.5s ease-in;
+            transition: max-height 0.3s ease-in; /* Accéléré de 0.5s à 0.3s */
         }
         
         .character {
@@ -256,7 +256,7 @@
                 <div class="term-content">
                     <p>C'est l'opposé d'une utopie. C'est un monde imaginaire où la société fonctionne de façon oppressive ou déshumanisante, même si cette réalité est masquée. Des exemples modernes incluent les univers de <em>Hunger Games</em> ou <em>1984</em>.</p>
                     <div style="text-align: center; margin-top: 10px;">
-                        <img src="/api/placeholder/400/320" alt="Hunger Games - Dystopie" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+                        <img src="hunger-games.jpg" alt="Hunger Games - Dystopie" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
                         <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Hunger Games : une dystopie où une élite contrôle la population</p>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
                 <div class="term-content">
                     <p>C'est une fiction qui imagine "et si l'Histoire avait été différente ?" Par exemple : "Et si les nazis avaient gagné la Seconde Guerre mondiale ?" comme dans la série <em>Le Maître du Haut Château</em>.</p>
                     <div style="text-align: center; margin-top: 10px;">
-                        <img src="/api/placeholder/400/320" alt="Le Maître du Haut Château - Uchronie" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+                        <img src="haut-chateau.jpg" alt="Le Maître du Haut Château - Uchronie" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
                         <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Le Maître du Haut Château : une uchronie où l'Allemagne nazie a gagné la guerre</p>
                     </div>
                 </div>
@@ -391,7 +391,7 @@
                 <div class="comparison-content">
                     <p>Cette idée fait penser aux technologies de modification génétique qui existent aujourd'hui, ou à certaines fictions comme <em>Bioshock</em> qui explorent les conséquences de telles manipulations.</p>
                     <div style="text-align: center; margin-top: 10px;">
-                        <img src="/api/placeholder/400/320" alt="Bioshock - Modification génétique" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+                        <img src="bioshock.jpg" alt="Bioshock - Modification génétique" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
                         <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Bioshock : un monde où la génétique modifie les humains</p>
                     </div>
                 </div>
@@ -413,7 +413,7 @@
                 <div class="comparison-content">
                     <p>Cette idée rappelle le film <em>Matrix</em> où les humains vivent dans une simulation, préférant une illusion confortable à une réalité difficile.</p>
                     <div style="text-align: center; margin-top: 10px;">
-                        <img src="/api/placeholder/400/320" alt="Matrix - Simulation de la réalité" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+                        <img src="matrix.jpg" alt="Matrix - Simulation de la réalité" style="max-width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
                         <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Matrix : choisir entre une réalité difficile ou une illusion confortable</p>
                     </div>
                 </div>
@@ -533,36 +533,6 @@
                 });
             });
         });
-        
-        // Function to replace placeholder images with actual images
-        function replacePlaceholderImages() {
-            // Le Maître du Haut Château
-            const hcImage = document.querySelector('img[alt="Le Maître du Haut Château - Uchronie"]');
-            if (hcImage) {
-                hcImage.src = "https://via.placeholder.com/400x320/3498db/ffffff?text=The+Man+In+The+High+Castle";
-            }
-            
-            // Matrix
-            const matrixImage = document.querySelector('img[alt="Matrix - Simulation de la réalité"]');
-            if (matrixImage) {
-                matrixImage.src = "https://via.placeholder.com/400x320/333333/ffffff?text=Matrix";
-            }
-            
-            // Hunger Games
-            const hgImage = document.querySelector('img[alt="Hunger Games - Dystopie"]');
-            if (hgImage) {
-                hgImage.src = "https://via.placeholder.com/400x320/e74c3c/ffffff?text=Hunger+Games";
-            }
-            
-            // Bioshock
-            const bsImage = document.querySelector('img[alt="Bioshock - Modification génétique"]');
-            if (bsImage) {
-                bsImage.src = "https://via.placeholder.com/400x320/2c3e50/ffffff?text=Bioshock";
-            }
-        }
-        
-        // Replace placeholder images
-        replacePlaceholderImages();
         
         // Auto-open first term for demonstration
         setTimeout(() => {
