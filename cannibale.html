@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannibale - Fiche de lecture</title>
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #f39c12;
+            --accent-color: #27ae60;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --section-bg: #fff;
+            --border-radius: 12px;
+            --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 15px;
+            font-size: 16px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 20px 0 15px 0;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 5px;
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 15px 0 10px 0;
+            font-size: 1.3rem;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background-color: var(--section-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .term {
+            background-color: #fff8dc;
+            border-left: 4px solid var(--accent-color);
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .term-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-weight: bold;
+        }
+        
+        .term-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #fff8dc;
+        }
+        
+        .term.active .term-content {
+            max-height: 1000px;
+            padding: 15px;
+            transition: max-height 0.3s ease-in;
+        }
+        
+        .character {
+            background-color: #ffebee;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .character h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .comparison {
+            background-color: #fff3e0;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .comparison h4 {
+            color: #e65100;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .comparison-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .comparison-content {
+            display: none;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+        }
+        
+        .citation {
+            font-style: italic;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f3e5f5;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+        }
+        
+        .idea {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: var(--border-radius);
+        }
+        
+        .timeline {
+            background-color: #e3f2fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+        
+        .timeline-event {
+            margin-left: 30px;
+            padding: 10px;
+            position: relative;
+            border-left: 3px solid #2196f3;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-event:before {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background-color: #2196f3;
+            border-radius: 50%;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #0d47a1;
+            margin-bottom: 5px;
+        }
+        
+        .nav-menu {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 0;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            margin: 0 5px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .highlight-box {
+            background-color: #ffebee;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            color: #757575;
+            font-style: italic;
+        }
+        
+        .important-point {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .flashcard {
+            background-color: #e1f5fe;
+            padding: 0;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .flashcard-question {
+            background-color: #03a9f4;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .flashcard-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        
+        .flashcard.active .flashcard-answer {
+            padding: 15px;
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                font-size: 15px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .nav-menu {
+                padding: 8px 0;
+            }
+            
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cannibale</h1>
+            <div class="subtitle">de Didier Daeninckx - Fiche de lecture</div>
+        </header>
+        
+        <div class="nav-menu">
+            <a href="#resume" class="nav-item">Résumé</a>
+            <a href="#contexte" class="nav-item">Contexte</a>
+            <a href="#vocabulaire" class="nav-item">Vocabulaire</a>
+            <a href="#personnages" class="nav-item">Personnages</a>
+            <a href="#comparaisons" class="nav-item">Comparaisons</a>
+            <a href="#idees" class="nav-item">Idées</a>
+            <a href="#debat" class="nav-item">Débat</a>
+            <a href="#quiz" class="nav-item">Quiz</a>
+        </div>
+        
+        <section id="resume" class="section">
+            <h2>C'est quoi ce livre, en bref ?</h2>
+            
+            <div class="highlight-box">
+                Un roman court (88 pages) qui raconte l'histoire vraie de Kanaks exposés comme des animaux lors de l'Exposition Coloniale de 1931 à Paris.
+            </div>
+            
+            <p><em>Cannibale</em> raconte l'histoire de Gocéné, un Kanak de Nouvelle-Calédonie. En 1931, il est amené à Paris avec d'autres Kanaks pour être exposé comme une attraction à l'Exposition Coloniale.</p>
+            
+            <p>Les Kanaks sont traités comme des animaux. Ils sont enfermés dans un enclos. Les visiteurs les regardent comme s'ils étaient au zoo.</p>
+            
+            <p>Un jour, un scandale éclate : des alligators du zoo sont malades. Pour les soigner, on décide d'échanger les Kanaks contre des crocodiles. Les Kanaks sont "prêtés" à un cirque allemand où ils doivent jouer les "cannibales".</p>
+            
+            <p>Gocéné et ses amis tentent de s'échapper et de dénoncer ce traitement inhumain.</p>
+            
+            <div class="image-placeholder">
+                [Image : Exposition Coloniale de 1931 avec un "village kanak" reconstitué]
+            </div>
+        </section>
+        
+        <section id="contexte" class="section">
+            <h2>Le contexte historique</h2>
+            
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-date">1853</div>
+                    <p>La France s'empare de la Nouvelle-Calédonie.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1878-1917</div>
+                    <p>Révoltes des Kanaks contre la colonisation française.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1931</div>
+                    <p>Exposition Coloniale Internationale à Paris. La France montre sa "puissance coloniale".</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1946</div>
+                    <p>La Nouvelle-Calédonie devient un Territoire d'Outre-Mer.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1998</div>
+                    <p>Publication du roman "Cannibale" par Didier Daeninckx.</p>
+                </div>
+            </div>
+            
+            <h3>L'Exposition Coloniale de 1931</h3>
+            <p>C'était une grande exposition à Paris qui montrait les colonies françaises. Des millions de visiteurs sont venus voir des "villages indigènes" où des personnes des colonies étaient exposées.</p>
+            
+            <p>Le but ? Faire la propagande de l'empire colonial français et montrer sa "mission civilisatrice".</p>
+            
+            <div class="image-placeholder">
+                [Image : Affiche de l'Exposition Coloniale de 1931]
+            </div>
+        </section>
+        
+        <section id="vocabulaire" class="section">
+            <h2>Vocabulaire à connaître</h2>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Kanak</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Peuple autochtone (d'origine) de Nouvelle-Calédonie, un territoire français dans le Pacifique.</p>
+                    <div class="image-placeholder">
+                        [Image : Carte montrant la Nouvelle-Calédonie]
+                    </div>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Colonialisme</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Politique d'un pays qui conquiert et contrôle d'autres territoires. La France, l'Angleterre et d'autres pays européens ont colonisé de nombreux pays en Afrique, Asie et ailleurs.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Exposition coloniale</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Événement organisé pour montrer les colonies d'un pays. On y exposait des objets, des animaux mais aussi des êtres humains dans des "zoos humains".</p>
+                    <div class="image-placeholder">
+                        [Image : "Zoo humain" lors d'une exposition coloniale]
+                    </div>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Racisme</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Idéologie qui considère que certaines "races" sont supérieures à d'autres. Le colonialisme s'appuyait sur des idées racistes pour justifier la domination des peuples colonisés.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Propagande</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Information manipulée pour influencer l'opinion publique. L'Exposition Coloniale était une forme de propagande pour faire accepter le colonialisme aux Français.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Devoir de mémoire</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Obligation morale de se souvenir des événements tragiques du passé pour éviter qu'ils se reproduisent. Le roman de Daeninckx participe à ce devoir de mémoire en rappelant un épisode oublié de l'histoire française.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Exotisme</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Attirance pour ce qui est étranger, différent, "exotique". L'Exposition Coloniale jouait sur l'exotisme pour attirer les visiteurs.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="personnages" class="section">
+            <h2>Les personnages principaux</h2>
+            
+            <div class="character">
+                <h4>Gocéné</h4>
+                <p>Le personnage principal. C'est un Kanak amené de force à l'Exposition Coloniale de 1931. Il raconte son histoire 50 ans plus tard.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Badimoin</h4>
+                <p>Ami de Gocéné, il meurt à cause des mauvais traitements.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Miton</h4>
+                <p>Un autre Kanak du groupe.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Joseph</h4>
+                <p>Un employé du cirque allemand qui aide les Kanaks.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Fritz Müller</h4>
+                <p>Directeur du cirque allemand. Il exploite les Kanaks.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Gilles Mancelle</h4>
+                <p>Jeune journaliste qui écoute l'histoire de Gocéné en 1980.</p>
+            </div>
+        </section>
+        
+        <section id="comparaisons" class="section">
+            <h2>Les "zoos humains" vs. d'autres formes de discrimination</h2>
+            
+            <div class="comparison">
+                <h4>1. Les "zoos humains" et le racisme d'aujourd'hui</h4>
+                <p>Dans le livre, les Kanaks sont exposés comme des animaux à cause de leur origine.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Aujourd'hui, le racisme existe toujours mais sous des formes différentes : discriminations à l'embauche, violences policières, préjugés dans les médias... Des films comme "Get Out" montrent comment le racisme continue d'exister même quand il est caché.</p>
+                    <div class="image-placeholder">
+                        [Image : Affiche du film "Get Out" qui traite du racisme moderne]
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>2. L'exhibition des différences</h4>
+                <p>Les Kanaks sont forcés de jouer les "sauvages" pour divertir le public européen.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Dans certaines émissions de télé-réalité, on montre souvent des personnes de manière caricaturale. Les réseaux sociaux peuvent aussi transformer les différences en spectacle.</p>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>3. La déshumanisation</h4>
+                <p>Les Kanaks sont échangés contre des crocodiles, comme s'ils n'étaient pas des êtres humains.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Le jeu "Detroit: Become Human" explore la façon dont on peut refuser l'humanité à certains êtres. Il montre des androïdes qui sont traités comme des objets alors qu'ils ont une conscience.</p>
+                    <div class="image-placeholder">
+                        [Image : Capture d'écran du jeu "Detroit: Become Human"]
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>4. L'exploitation économique</h4>
+                <p>Les Kanaks sont utilisés pour gagner de l'argent sans être payés eux-mêmes.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Cela fait penser au problème actuel de l'exploitation des données personnelles par les grandes entreprises du web. Nos informations sont utilisées pour faire du profit sans que nous soyons vraiment rémunérés.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="idees" class="section">
+            <h2>Les idées principales à retenir</h2>
+            
+            <div class="idea">
+                <h3>Le racisme institutionnel</h3>
+                <p>Le livre montre comment le racisme était organisé par l'État lui-même à travers l'Exposition Coloniale.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La résistance</h3>
+                <p>Malgré leur situation, Gocéné et ses amis résistent et cherchent à s'échapper.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La mémoire historique</h3>
+                <p>Le roman rappelle un épisode peu connu et honteux de l'histoire française. C'est important de ne pas oublier ces moments difficiles.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La dignité humaine</h3>
+                <p>Daeninckx montre comment les Kanaks luttent pour garder leur dignité malgré l'humiliation qu'ils subissent.</p>
+            </div>
+            
+            <div class="citation">
+                <p>"On nous a amenés à la foire, on a été exposés comme des bêtes, échangés contre des crocodiles."</p>
+                <p>Cette phrase résume la façon dont les Kanaks ont été traités : comme des objets ou des animaux, pas comme des êtres humains.</p>
+            </div>
+        </section>
+        
+        <section id="quiz" class="section">
+            <h2>Quiz interactif</h2>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">En quelle année se déroule l'action principale du roman ?</div>
+                <div class="flashcard-answer">En 1931, pendant l'Exposition Coloniale Internationale de Paris.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Qui sont les Kanaks ?</div>
+                <div class="flashcard-answer">Les Kanaks sont le peuple autochtone (d'origine) de Nouvelle-Calédonie, un territoire français situé dans l'océan Pacifique.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Pourquoi les Kanaks sont-ils échangés contre des crocodiles ?</div>
+                <div class="flashcard-answer">Parce que des alligators du zoo sont malades et ont besoin de soins. Les organisateurs décident d'échanger les Kanaks contre des crocodiles sains, comme s'ils étaient des marchandises.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Comment s'appelle le personnage principal ?</div>
+                <div class="flashcard-answer">Le personnage principal s'appelle Gocéné. C'est lui qui raconte son histoire 50 ans plus tard.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Quel est le genre littéraire de "Cannibale" ?</div>
+                <div class="flashcard-answer">C'est un roman historique court (88 pages) qui mélange fiction et faits réels pour dénoncer un épisode peu connu de l'histoire coloniale française.</div>
+            </div>
+        </section>
+        
+        <section id="debat" class="section">
+            <h2>Pour débattre : les nuances de la colonisation</h2>
+            
+            <div class="highlight-box">
+                La colonisation n'est pas une histoire simplement "noire ou blanche". C'est un sujet complexe avec des aspects contradictoires.
+            </div>
+            
+            <h3>La "mission civilisatrice" : un mélange d'idées et d'actions</h3>
+            
+            <div class="comparison">
+                <h4>Ce que la France disait vouloir faire</h4>
+                <p>La France parlait de "mission civilisatrice" : apporter l'éducation, la médecine, les technologies aux peuples colonisés.</p>
+                <button class="comparison-button">Voir les deux côtés</button>
+                <div class="comparison-content">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        <div style="flex: 1; min-width: 250px; background-color: #e8f5e9; padding: 10px; border-radius: 8px;">
+                            <h5 style="color: #2e7d32;">Ce qui a été fait de positif :</h5>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Construction d'écoles et d'hôpitaux</li>
+                                <li>Nouvelles technologies</li>
+                                <li>Routes et infrastructures</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; min-width: 250px; background-color: #ffebee; padding: 10px; border-radius: 8px;">
+                            <h5 style="color: #c62828;">Les réalités négatives :</h5>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Prise des terres des Kanaks</li>
+                                <li>Travail forcé</li>
+                                <li>Exposition comme des "sauvages"</li>
+                                <li>Chute de la population kanak</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Pourquoi c'est compliqué</h3>
+            
+            <div style="background-color: #f5f5f5; padding: 15px; border-radius: 12px; margin: 20px 0; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+                <h4 style="text-align: center; margin-bottom: 15px; color: #333;">Les deux visages de la colonisation</h4>
+                
+                <div style="display: flex; flex-direction: column; max-width: 600px; margin: 0 auto;">
+                    <!-- Titre central -->
+                    <div style="background-color: #3f51b5; color: white; padding: 10px; text-align: center; border-radius: 8px; margin-bottom: 10px; font-weight: bold;">
+                        La "mission civilisatrice" française
+                    </div>
+                    
+                    <!-- Flèches divergentes -->
+                    <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                        <div style="width: 45%; height: 30px; position: relative;">
+                            <div style="position: absolute; width: 100%; height: 2px; background-color: #2e7d32; top: 15px;"></div>
+                            <div style="position: absolute; right: 0; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 15px solid #2e7d32; top: 5px;"></div>
+                        </div>
+                        <div style="width: 10%"></div>
+                        <div style="width: 45%; height: 30px; position: relative;">
+                            <div style="position: absolute; width: 100%; height: 2px; background-color: #c62828; top: 15px;"></div>
+                            <div style="position: absolute; left: 0; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 15px solid #c62828; top: 5px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Boîtes avec les deux perspectives -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <div style="width: 48%; background-color: #e8f5e9; padding: 10px; border-radius: 8px; border-top: 5px solid #2e7d32;">
+                            <h5 style="color: #2e7d32; text-align: center; margin-bottom: 8px;">Ce qu'ils disaient vouloir faire</h5>
+                            <ul style="list-style-type: none; padding-left: 5px; font-size: 0.9rem;">
+                                <li>✓ Apporter l'éducation</li>
+                                <li>✓ Construire des infrastructures</li>
+                                <li>✓ Développer l'économie</li>
+                                <li>✓ Soigner les maladies</li>
+                            </ul>
+                        </div>
+                        <div style="width: 48%; background-color: #ffebee; padding: 10px; border-radius: 8px; border-top: 5px solid #c62828;">
+                            <h5 style="color: #c62828; text-align: center; margin-bottom: 8px;">Ce qui s'est souvent passé</h5>
+                            <ul style="list-style-type: none; padding-left: 5px; font-size: 0.9rem;">
+                                <li>✗ Exploitation des personnes</li>
+                                <li>✗ Vol des terres</li>
+                                <li>✗ Destruction des cultures</li>
+                                <li>✗ Exposition comme au zoo</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Les acteurs et leurs motivations -->
+                    <div style="background-color: #e1f5fe; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                        <h5 style="color: #0277bd; text-align: center; margin-bottom: 8px;">Les différents acteurs</h5>
+                        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Politiciens</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 70%, #c62828 30%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">Surtout idéalistes</div>
+                            </div>
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Administrateurs</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 50%, #c62828 50%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">Mélange égal</div>
+                            </div>
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Colons</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 20%, #c62828 80%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">Surtout exploiteurs</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conclusion -->
+                    <div style="background-color: #f3e5f5; padding: 10px; border-radius: 8px; border-left: 5px solid #9c27b0;">
+                        <p style="text-align: center; font-weight: bold; margin: 0;">
+                            Une réalité complexe qui varie selon les acteurs, les lieux et les périodes
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="idea">
+                <p><span class="important-point">Les différentes motivations :</span> Tous les Français impliqués dans la colonisation n'avaient pas les mêmes motivations :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                    <li>Certains croyaient sincèrement aider</li>
+                    <li>D'autres voulaient surtout gagner de l'argent</li>
+                    <li>Beaucoup avaient un mélange des deux motivations</li>
+                </ul>
+            </div>
+            
+            <div class="idea">
+                <p><span class="important-point">Les idées de l'époque :</span> Au 19ème siècle, beaucoup d'Européens pensaient que :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                    <li>Leur façon de vivre était "meilleure"</li>
+                    <li>Ils avaient le "devoir" d'apporter leur culture aux autres</li>
+                    <li>Les autres cultures étaient "moins évoluées"</li>
+                </ul>
+                <p>Ces idées sont fausses, mais elles expliquent (sans justifier) certaines actions.</p>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Comment juger aujourd'hui la colonisation ?</div>
+                <div class="flashcard-answer">
+                    <p>Pour comprendre l'histoire de façon nuancée, on peut :</p>
+                    <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                        <li>Reconnaître les intentions sincères de certains, tout en condamnant les actes violents et racistes</li>
+                        <li>Éviter de juger le passé uniquement avec nos idées d'aujourd'hui</li>
+                        <li>Écouter ce que les descendants des peuples colonisés ont à dire</li>
+                        <li>Regarder les conséquences réelles plutôt que seulement les intentions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="citation">
+                <p>"La 'mission civilisatrice' n'était ni entièrement cynique ni authentiquement humaniste. Elle était le produit d'une époque avec ses propres croyances."</p>
+            </div>
+            
+            <div class="idea">
+                <p>Dans "Cannibale", Didier Daeninckx nous montre surtout le côté le plus sombre de la colonisation : l'exposition des humains comme des animaux. C'est important de se souvenir de ces injustices, même si l'histoire complète de la colonisation est plus complexe.</p>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Conclusion</h2>
+            <p><em>Cannibale</em> nous rappelle un épisode sombre de l'histoire française. À travers l'histoire de Gocéné, Didier Daeninckx nous montre comment des êtres humains ont été traités comme des objets ou des animaux à cause de leur origine.</p>
+            
+            <p>Ce livre nous fait réfléchir sur le racisme, la colonisation et le respect de la dignité humaine. Ces questions sont toujours importantes aujourd'hui.</p>
+            
+            <p>En racontant cette histoire vraie mais oubliée, l'auteur participe au devoir de mémoire : se souvenir des erreurs du passé pour ne pas les répéter.</p>
+        </section>
+    </div>
+
+    <script>
+        // Toggle vocabulary terms
+        document.querySelectorAll('.term-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const term = this.parentElement;
+                term.classList.toggle('active');
+                const toggle = this.querySelector('.toggle');
+                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+        
+        // Toggle comparisons
+        document.querySelectorAll('.comparison-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    this.textContent = 'Voir la comparaison moderne';
+                } else {
+                    content.style.display = 'block';
+                    this.textContent = 'Masquer la comparaison';
+                }
+            });
+        });
+        
+        // Toggle flashcards
+        document.querySelectorAll('.flashcard-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const flashcard = this.parentElement;
+                flashcard.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Auto-open first term and flashcard for demonstration
+        setTimeout(() => {
+            document.querySelector('.term').classList.add('active');
+            document.querySelector('.term .toggle').textContent = '▲';
+            document.querySelector('.flashcard').classList.add('active');
+        }, 500);
+    </script>
+</body>
+</html>
