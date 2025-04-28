@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autant en emporte le vent - Fiche de lecture</title>
+    <style>
+        :root {
+            --primary-color: #2d545e;
+            --secondary-color: #a37d52;
+            --accent-color: #8b0000;
+            --background-color: #f8f5f1;
+            --text-color: #333;
+            --section-bg: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Verdana', 'Geneva', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+            font-size: 18px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2.6rem;
+            margin-bottom: 10px;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.5px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 25px 0 20px 0;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 8px;
+            font-size: 2rem;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.5px;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 20px 0 15px 0;
+            font-size: 1.6rem;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background-color: var(--section-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        p {
+            margin-bottom: 18px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        /* Styles pour les images */
+        .image-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .image-caption {
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        /* Styles pour les cartes retournables */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 240px;
+            perspective: 1000px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+        }
+        
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .flip-card-front {
+            background-color: #f0f5f7;
+            color: var(--primary-color);
+        }
+        
+        .flip-card-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        
+        /* Styles pour le carrousel */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .carousel-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            padding: 25px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        
+        .carousel-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .carousel-dot.active {
+            background-color: var(--primary-color);
+        }
+        
+        .term {
+            background-color: #faf7ef;
+            border-left: 4px solid var(--accent-color);
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .term-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-weight: bold;
+        }
+        
+        .term-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #faf7ef;
+        }
+        
+        .term.active .term-content {
+            max-height: 1000px;
+            padding: 20px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .character {
+            background-color: #f0f5f7;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .character h4 {
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .comparison {
+            background-color: #f9f2e7;
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .comparison h4 {
+            color: #8c6d46;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .comparison-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 15px 0;
+            display: inline-block;
+            font-weight: bold;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+        
+        .comparison-content {
+            display: none;
+            padding: 20px;
+            background-color: #fcf8f0;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+        }
+        
+        .citation {
+            font-style: italic;
+            border-left: 4px solid #702632;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f7eeee;
+            border-radius: var(--border-radius);
+            font-size: 1.15rem;
+        }
+        
+        .idea {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f0f5f0;
+            border-radius: var(--border-radius);
+        }
+        
+        .timeline {
+            background-color: #f0f5f7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+        
+        .timeline-event {
+            margin-left: 40px;
+            padding: 15px;
+            position: relative;
+            border-left: 3px solid var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .timeline-event:before {
+            content: "";
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #1c3c48;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .nav-menu {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 15px 0;
+            margin-bottom: 25px;
+            border-radius: var(--border-radius);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 0 8px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .highlight-box {
+            background-color: #eef4f7;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 220px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            color: #757575;
+            font-style: italic;
+        }
+        
+        .important-point {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .flashcard {
+            background-color: #f0f5f7;
+            padding: 0;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .flashcard-question {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .flashcard-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        
+        .flashcard.active .flashcard-answer {
+            padding: 20px;
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+        
+        .recommendation {
+            background-color: #f0efe8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            border-left: 4px solid #5a7d8c;
+        }
+        
+        .recommendation h4 {
+            color: #5a7d8c;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .book-card, .film-card {
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+        
+        .book-card h5, .film-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .vocabulary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .vocabulary-table th, .vocabulary-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .vocabulary-table th {
+            background-color: #f0f5f7;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .vocabulary-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .vocabulary-table tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .political-analysis {
+            background-color: #f5f0f0;
+            border-left: 4px solid #8b0000;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .political-analysis h4 {
+            color: #8b0000;
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+        }
+        
+        /* Tabs pour les sections de personnages */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .tab-label {
+            order: 1;
+            padding: 12px 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            background-color: #f0f5f7;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-content {
+            order: 99;
+            flex-grow: 1;
+            width: 100%;
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .tab-input {
+            display: none;
+        }
+        
+        .tab-input:checked + .tab-label {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tab-input:checked + .tab-label + .tab-content {
+            display: block;
+        }
+        
+        /* Accordion pour les informations détaillées */
+        .accordion {
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .accordion-item {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .accordion-header {
+            background-color: #f9f9f9;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: white;
+        }
+        
+        .accordion-content-inner {
+            padding: 20px;
+        }
+        
+        .accordion-item.active .accordion-header {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .accordion-item.active .accordion-content {
+            max-height: 1000px;
+        }
+        
+        @media (max-width: 700px) {
+            body {
+                padding: 15px;
+                font-size: 17px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-menu {
+                padding: 10px 0;
+            }
+            
+            .nav-item {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .flip-card {
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Autant en emporte le vent</h1>
+            <div class="subtitle">de Margaret Mitchell - Fiche de lecture approfondie</div>
+            <div class="image-container" style="margin-top: 15px;">
+                <img src="/api/placeholder/200/300" alt="Couverture du roman Autant en emporte le vent">
+                <!-- Mots-clés pour l'image: "couverture livre autant en emporte le vent édition française classique" -->
+                <div class="image-caption">Couverture du roman</div>
+            </div>
+        </header>
+        
+        <div class="nav-menu">
+            <a href="#resume" class="nav-item">Résumé</a>
+            <a href="#contexte" class="nav-item">Contexte</a>
+            <a href="#personnages" class="nav-item">Personnages</a>
+            <a href="#themes" class="nav-item">Thèmes</a>
+            <a href="#lexique" class="nav-item">Lexique</a>
+            <a href="#analyse" class="nav-item">Analyse</a>
+            <a href="#debat" class="nav-item">Débat</a>
+            <a href="#recommandations" class="nav-item">Recommandations</a>
+        </div>
+        
+        <section id="resume" class="section">
+            <h2>L'œuvre et son essence</h2>
+            
+            <div class="highlight-box">
+                Un monument de la littérature américaine (1036 pages), publié en 1936, qui dépeint la chute d'une société aristocratique sudiste pendant et après la guerre de Sécession, à travers le destin de l'indomptable Scarlett O'Hara.
+            </div>
+            
+            <div class="image-container">
+                <img src="/api/placeholder/400/250" alt="Vivien Leigh et Clark Gable dans l'adaptation cinématographique">
+                <!-- Mots-clés pour l'image: "Vivien Leigh Clark Gable Autant en emporte le vent 1939 film scène célèbre" -->
+                <div class="image-caption">Vivien Leigh (Scarlett O'Hara) et Clark Gable (Rhett Butler) dans l'adaptation cinématographique de 1939</div>
+            </div>
+            
+            <p><em>Autant en emporte le vent</em> (<em>Gone with the Wind</em> en version originale) est le seul roman de Margaret Mitchell, qui lui valut le prix Pulitzer en 1937. L'œuvre se déroule en Géorgie, dans le Sud esclavagiste des États-Unis, de 1861 à 1873, période englobant la guerre de Sécession et la Reconstruction.</p>
+            
+            <p>Ce roman foisonnant retrace le parcours de Scarlett O'Hara, fille de planteur irlandais, jeune femme capricieuse et déterminée qui, confrontée à la guerre et à la destruction de son monde, se transforme en une survivante impitoyable. Son histoire d'amour impossible avec l'énigmatique Rhett Butler se déroule sur fond d'un Sud qui s'effondre, puis tente de se reconstruire.</p>
+            
+            <p>L'œuvre est remarquable par sa complexité narrative, son portrait minutieux d'une société disparue, et son exploration de thèmes comme la survie, l'adaptabilité, l'amour, le deuil et la transformation sociale. Bien qu'écrit dans la perspective des Sudistes blancs, ce roman offre une fresque historique saisissante, teintée de la nostalgie d'un monde révolu.</p>
+            
+            <div class="citation">
+                <p>"Au fond, ma chère, je me fiche pas mal de ce qui peut m'arriver."</p>
+                <p>— Rhett Butler à Scarlett O'Hara, illustrant le cynisme pragmatique qui caractérise ce personnage emblématique.</p>
+            </div>
+            
+            <p>Cette œuvre monumentale, adaptée au cinéma dès 1939 par Victor Fleming avec Vivien Leigh et Clark Gable, continue de susciter des débats sur sa représentation de l'esclavage et de la société sudiste, tout en demeurant l'un des livres les plus vendus au monde.</p>
+        </section>
+        
+        <section id="contexte" class="section">
+            <h2>Le contexte historique</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item active">
+                    <div class="accordion-header">
+                        Chronologie de la guerre de Sécession et son contexte
+                        <span class="toggle">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <div class="timeline">
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1861</div>
+                                    <p>Début de la guerre de Sécession. Attaque de Fort Sumter par les Confédérés (12 avril). Les États du Sud se sont séparés de l'Union suite à l'élection d'Abraham Lincoln.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1863</div>
+                                    <p>Proclamation d'émancipation des esclaves par Lincoln. Batailles décisives de Gettysburg et Vicksburg qui marquent un tournant dans la guerre en faveur de l'Union.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1864</div>
+                                    <p>Campagne de Géorgie et prise d'Atlanta par le général Sherman. La marche vers la mer détruit les infrastructures et ravage l'économie du Sud.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1865</div>
+                                    <p>Reddition du général Lee à Appomattox. Fin de la guerre de Sécession. Assassinat de Lincoln. Début de la Reconstruction sous la présidence de Johnson.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1865-1877</div>
+                                    <p>Période de Reconstruction. Tensions raciales, émergence du Ku Klux Klan, occupation militaire du Sud, luttes politiques entre Républicains radicaux et Démocrates.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1877</div>
+                                    <p>Fin de la Reconstruction. Compromis de 1877 qui retire les troupes fédérales du Sud et marque le début de l'ère des lois Jim Crow et de la ségrégation.</p>
+                                </div>
+                                
+                                <div class="timeline-event">
+                                    <div class="timeline-date">1936</div>
+                                    <p>Publication du roman en pleine Grande Dépression, à une époque où les Américains sont réceptifs aux récits de survie et de résilience.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="image-container">
+                                <img src="/api/placeholder/450/300" alt="Carte des États-Unis pendant la guerre de Sécession">
+                                <!-- Mots-clés pour l'image: "carte états-unis guerre sécession nord sud union confédération" -->
+                                <div class="image-caption">Carte des États-Unis pendant la guerre de Sécession, montrant les États de l'Union et les États confédérés</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>La guerre de Sécession et ses enjeux</h3>
+            <p>La guerre de Sécession (1861-1865) fut le conflit le plus meurtrier de l'histoire américaine, avec plus de 620 000 morts. Au-delà de la question de l'esclavage, le conflit révélait des tensions profondes entre deux modèles de société : le Nord industriel, urbanisé et capitaliste face au Sud agraire, aristocratique et esclavagiste.</p>
+            
+            <p>Les enjeux économiques étaient considérables : le Sud dépendait de l'exportation du coton vers l'Europe (ce qu'on appelait "King Cotton", le roi coton) et d'une main-d'œuvre servile, tandis que le Nord développait son industrie et ses infrastructures. Le conflit portait également sur la conception même de l'Union américaine : les États avaient-ils le droit de faire sécession ?</p>
+            
+            <div class="political-analysis">
+                <h4>Perspective politique</h4>
+                <p>Cette guerre civile américaine présente des parallèles intéressants avec les tensions contemporaines au sein de l'Union européenne : la question de la souveraineté des États face au pouvoir central, les disparités économiques entre régions, et la difficulté à construire une identité commune transcendant les particularismes régionaux. L'exemple américain montre que l'intégration politique d'espaces économiques et culturels disparates est un processus long et parfois violent.</p>
+            </div>
+            
+            <h3>La Reconstruction : une période tourmentée</h3>
+            <p>Après la guerre, le Sud dut se reconstruire dans un contexte d'occupation militaire et de profondes transformations sociales. La libération de quatre millions d'esclaves bouleversa l'économie et la structure sociale. Le 13ème amendement abolit l'esclavage (1865), le 14ème établit la citoyenneté pour tous (1868), et le 15ème garantit le droit de vote aux hommes noirs (1870).</p>
+            
+            <p>Cependant, cette période vit aussi l'émergence d'organisations terroristes comme le Ku Klux Klan, qui tentaient de maintenir la suprématie blanche par la violence. La fin de la Reconstruction en 1877 marqua l'abandon des Afro-Américains par le gouvernement fédéral et le début d'un système de ségrégation qui allait durer près d'un siècle.</p>
+            
+            <p>Le roman de Mitchell reflète la vision des "Lost Cause" (cause perdue), une interprétation révisionniste de la guerre de Sécession populaire parmi les Blancs du Sud, qui idéalisait l'antebellum comme une société raffinée et chevaleresque, minimisait le rôle de l'esclavage dans le conflit, et dépeignait la Reconstruction comme une période d'humiliation imposée par un Nord vindicatif.</p>
+        </section>
+        
+        <section id="personnages" class="section">
+            <h2>Les personnages principaux</h2>
+            
+            <div class="tabs">
+                <input type="radio" name="tabs" id="tab1" class="tab-input" checked>
+                <label for="tab1" class="tab-label">Scarlett</label>
+                <div class="tab-content">
+                    <div class="character">
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 180px;">
+                            <img src="/api/placeholder/180/250" alt="Portrait de Scarlett O'Hara">
+                            <!-- Mots-clés pour l'image: "Vivien Leigh Scarlett O'Hara portrait Autant en emporte le vent" -->
+                            <div class="image-caption">Vivien Leigh dans le rôle de Scarlett O'Hara</div>
+                        </div>
+                        <h4>Scarlett O'Hara</h4>
+                        <p>Protagoniste du roman, fille d'un planteur irlandais et d'une aristocrate française. Belle, séduisante et manipulatrice, elle incarne la capacité d'adaptation et la volonté de survie face à l'adversité. Amoureuse d'Ashley Wilkes au début du roman, elle évolue à travers ses trois mariages et les épreuves de la guerre et de la Reconstruction pour devenir une femme d'affaires impitoyable. Son caractère complexe mêle égoïsme, détermination, courage et aveuglement affectif.</p>
+                        <p>Sa transformation reflète celle du Sud : du monde insouciant de l'antebellum à la dure réalité d'un ordre nouveau, capitaliste et pragmatique. Ce n'est qu'à la fin du roman qu'elle prend conscience de ses véritables sentiments pour Rhett Butler, trop tard.</p>
+                    </div>
+                </div>
+                
+                <input type="radio" name="tabs" id="tab2" class="tab-input">
+                <label for="tab2" class="tab-label">Rhett</label>
+                <div class="tab-content">
+                    <div class="character">
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 180px;">
+                            <img src="/api/placeholder/180/250" alt="Portrait de Rhett Butler">
+                            <!-- Mots-clés pour l'image: "Clark Gable Rhett Butler portrait Autant en emporte le vent" -->
+                            <div class="image-caption">Clark Gable dans le rôle de Rhett Butler</div>
+                        </div>
+                        <h4>Rhett Butler</h4>
+                        <p>Aventurier, contrebandier et spéculateur, originaire de Charleston mais rejeté par la bonne société sudiste. Cynique, lucide et en avance sur son temps, il est le seul à anticiper la défaite du Sud et à s'y préparer. Son amour pour Scarlett, qu'il épouse finalement, est teinté d'admiration pour sa force de caractère et son refus des conventions sociales. Mais la relation est tumultueuse et se solde par son célèbre "Franchement, ma chère, c'est le cadet de mes soucis" lorsqu'il l'abandonne.</p>
+                        <p>Rhett représente la modernité et le capitalisme américain naissant, capable de prospérer dans le chaos tandis que l'ancien ordre s'effondre.</p>
+                    </div>
+                </div>
+                
+                <input type="radio" name="tabs" id="tab3" class="tab-input">
+                <label for="tab3" class="tab-label">Ashley</label>
+                <div class="tab-content">
+                    <div class="character">
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 180px;">
+                            <img src="/api/placeholder/180/250" alt="Portrait d'Ashley Wilkes">
+                            <!-- Mots-clés pour l'image: "Leslie Howard Ashley Wilkes portrait Autant en emporte le vent" -->
+                            <div class="image-caption">Leslie Howard dans le rôle d'Ashley Wilkes</div>
+                        </div>
+                        <h4>Ashley Wilkes</h4>
+                        <p>Aristocrate sudiste raffiné, cultivé et idéaliste. Objet de l'amour obsessionnel de Scarlett pendant la majeure partie du roman, il épouse sa cousine Mélanie Hamilton. Ashley symbolise le Sud d'avant-guerre — chevaleresque, élégant, mais inadapté au monde moderne. Son incapacité à s'ajuster à la nouvelle réalité économique après la guerre illustre la disparition de l'aristocratie sudiste traditionnelle.</p>
+                    </div>
+                </div>
+                
+                <input type="radio" name="tabs" id="tab4" class="tab-input">
+                <label for="tab4" class="tab-label">Mélanie</label>
+                <div class="tab-content">
+                    <div class="character">
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 180px;">
+                            <img src="/api/placeholder/180/250" alt="Portrait de Mélanie Hamilton">
+                            <!-- Mots-clés pour l'image: "Olivia de Havilland Mélanie Hamilton portrait Autant en emporte le vent" -->
+                            <div class="image-caption">Olivia de Havilland dans le rôle de Mélanie Hamilton</div>
+                        </div>
+                        <h4>Mélanie Hamilton Wilkes</h4>
+                        <p>Épouse d'Ashley, elle incarne la parfaite dame du Sud : douce, altruiste, loyale et profondément vertueuse. Son amitié indéfectible pour Scarlett, malgré les machinations de cette dernière pour lui prendre Ashley, représente l'idéal moral que Scarlett ne peut comprendre qu'après sa mort. Mélanie est la conscience morale du roman, préservant les valeurs de gentillesse et de dignité même dans l'adversité.</p>
+                    </div>
+                </div>
+                
+                <input type="radio" name="tabs" id="tab5" class="tab-input">
+                <label for="tab5" class="tab-label">Autres</label>
+                <div class="tab-content">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <h4>Mammy</h4>
+                                <p>(Passez la souris sur cette carte pour découvrir ce personnage)</p>
+                                <div class="image-container" style="width: 120px; margin: 0 auto;">
+                                    <img src="/api/placeholder/120/160" alt="Portrait de Mammy">
+                                    <!-- Mots-clés pour l'image: "Hattie McDaniel Mammy portrait Autant en emporte le vent" -->
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h4>Mammy</h4>
+                                <p>Esclave puis domestique noire de la famille O'Hara, elle est une figure maternelle autoritaire et sage qui connaît intimement Scarlett et ne se laisse pas duper par ses manipulations. Bien que dépeinte avec affection, son personnage correspond au stéréotype de la "Mammy" loyale et dévouée dans la vision nostalgique du Sud. Sa dignité et son intelligence sont néanmoins mises en valeur.</p>
+                                <p>Interprétée par Hattie McDaniel, première actrice afro-américaine à remporter un Oscar.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <h4>Gerald et Ellen O'Hara</h4>
+                                <p>(Passez la souris sur cette carte pour découvrir ces personnages)</p>
+                                <div class="image-container" style="width: 120px; margin: 0 auto;">
+                                    <img src="/api/placeholder/120/160" alt="Portrait des parents O'Hara">
+                                    <!-- Mots-clés pour l'image: "Gerald Ellen O'Hara parents Scarlett Tara plantation Autant en emporte le vent" -->
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h4>Les parents de Scarlett</h4>
+                                <p><strong>Gerald O'Hara</strong> : Père de Scarlett, immigrant irlandais devenu planteur prospère par son ambition et sa ruse. Symbole de l'ascension sociale possible dans le Sud antebellum, il perd la raison après la mort de sa femme Ellen et la destruction de son monde pendant la guerre.</p>
+                                <p><strong>Ellen O'Hara</strong> : Mère de Scarlett, issue d'une famille aristocratique française de Savannah. Incarnation de la parfaite maîtresse de plantation, elle meurt du typhus pendant la guerre. Son souvenir et ses valeurs hantent Scarlett, qui se sent constamment indigne de son héritage moral.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="themes" class="section">
+            <h2>Les thèmes majeurs</h2>
+            
+            <div class="idea">
+                <h3>Survie et adaptation</h3>
+                <p>Au cœur du roman se trouve la lutte pour la survie dans un monde bouleversé par la guerre et les transformations sociales. Scarlett, avec son leitmotiv "Je penserai à tout cela demain", illustre une capacité remarquable d'adaptation, rejetant les conventions sociales et les principes moraux quand ils entravent sa survie. Cette thématique, publiée pendant la Grande Dépression, résonnait fortement auprès des lecteurs confrontés eux-mêmes à des temps difficiles.</p>
+                <p>Le contraste entre Scarlett, qui s'adapte, et Ashley, qui reste figé dans le passé, illustre les réponses différentes face au changement radical : pragmatisme contre idéalisme, évolution contre tradition.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>Transformation sociale et déclin d'une civilisation</h3>
+                <p>Mitchell dépeint magistralement l'effondrement d'un ordre social aristocratique et son remplacement par un nouvel ordre capitaliste plus brutal. La plantation de Tara, microcosme du Sud antebellum, subit les ravages de la guerre puis doit se réinventer dans un contexte économique totalement différent.</p>
+                <p>La nostalgie pour un monde perdu imprègne le roman, mais Mitchell ne cache pas les contradictions et les injustices de cette société fondée sur l'esclavage, même si elle les présente souvent à travers le prisme idéalisant des personnages sudistes.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>Amour aveugle et lucidité</h3>
+                <p>L'obsession de Scarlett pour Ashley, qu'elle idéalise sans jamais vraiment le comprendre, contraste avec son incapacité à reconnaître son amour pour Rhett jusqu'à ce qu'il soit trop tard. Cette cécité sentimentale fait écho à l'aveuglement collectif du Sud quant à ses chances de victoire dans la guerre.</p>
+                <p>Mitchell explore brillamment comment l'idéalisation et l'illusion peuvent détruire le bonheur réel, tandis que la lucidité (incarnée par Rhett) permet de naviguer dans un monde en plein bouleversement.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La terre comme ancrage identitaire</h3>
+                <p>Le lien à la terre, symbolisé par Tara, est une thématique fondamentale du roman. Pour Gerald O'Hara, "la terre est la seule chose qui vaille qu'on vive pour elle, qu'on se batte pour elle, qu'on meure pour elle, car c'est la seule chose qui dure". Cette connexion quasi mystique à la terre devient la source de résilience de Scarlett.</p>
+                <p>Quand tout s'écroule, c'est vers Tara qu'elle retourne, puisant sa force dans ce lien tellurique. Cette dimension presque païenne contraste avec la religiosité conventionnelle de la société sudiste dépeinte dans le roman.</p>
+            </div>
+            
+            <div class="political-analysis">
+                <h4>Question raciale et représentation de l'esclavage</h4>
+                <p>La représentation de l'esclavage est l'aspect le plus problématique et le plus contesté du roman. Mitchell dépeint généralement une relation paternaliste idéalisée entre maîtres et esclaves, minimisant les horreurs du système. Les personnages noirs, bien que parfois dotés d'une certaine dignité, restent largement confinés à des stéréotypes : la "Mammy" dévouée, le "bon esclave" loyal.</p>
+                <p>La période de la Reconstruction est vue principalement à travers le prisme des Sudistes blancs, avec les affranchis souvent présentés comme incompétents ou menaçants. Cette vision reflète les préjugés de l'époque où Mitchell écrivait, imprégnée de la mythologie du "Lost Cause" sudiste qui minimisait le rôle central de l'esclavage dans le conflit.</p>
+                <p>Cette dimension du roman a suscité de nombreuses critiques et continue d'alimenter des débats sur la façon dont nous abordons les œuvres littéraires qui reflètent des visions aujourd'hui considérées comme problématiques.</p>
+            </div>
+            
+            <div class="citation">
+                <p>"Il n'y a que deux choses qui comptent vraiment pour un homme, c'est la terre et la femme... du moins dans l'ordre où il les a connues."</p>
+                <p>Cette citation reflète l'importance primordiale accordée à la terre dans l'identité sudiste, tout en soulignant la place complexe des femmes dans cette société patriarcale.</p>
+            </div>
+        </section>
+        
+        <section id="lexique" class="section">
+            <h2>Lexique littéraire et expressions châtiées</h2>
+            
+            <p>L'œuvre de Mitchell, traduite en français par Pierre-François Caillé, recèle une richesse lexicale qui mérite qu'on s'y attarde. Voici quelques termes et expressions particulièrement évocateurs ou significatifs :</p>
+            
+            <table class="vocabulary-table">
+                <tr>
+                    <th>Terme</th>
+                    <th>Définition</th>
+                    <th>Contexte dans l'œuvre</th>
+                </tr>
+                <tr>
+                    <td>Antebellum</td>
+                    <td>Littéralement "avant la guerre" (du latin). Désigne la période précédant la guerre de Sécession.</td>
+                    <td>Évoque l'âge d'or idéalisé du Sud des plantations avant 1861.</td>
+                </tr>
+                <tr>
+                    <td>Carpetbagger</td>
+                    <td>Terme péjoratif désignant les Nordistes venus dans le Sud après la guerre pour profiter de la Reconstruction. Ils étaient supposés n'avoir qu'un sac de voyage en tapisserie ("carpet bag").</td>
+                    <td>Représente les opportunistes du Nord exploitant la détresse du Sud vaincu.</td>
+                </tr>
+                <tr>
+                    <td>Scalawag</td>
+                    <td>Sudiste collaborant avec les Républicains pendant la Reconstruction, considéré comme traître par ses compatriotes.</td>
+                    <td>Illustre les divisions internes du Sud après la défaite.</td>
+                </tr>
+                <tr>
+                    <td>Atavique</td>
+                    <td>Qui relève de l'atavisme, tendance à reproduire les caractères des ancêtres.</td>
+                    <td>Décrit l'attachement viscéral de Scarlett à Tara, hérité de son père irlandais.</td>
+                </tr>
+                <tr>
+                    <td>Acrimonie</td>
+                    <td>Aigreur de caractère qui se manifeste par des paroles blessantes.</td>
+                    <td>Caractérise les échanges entre Scarlett et Rhett dans les phases difficiles de leur mariage.</td>
+                </tr>
+                <tr>
+                    <td>Opprobre</td>
+                    <td>Déshonneur profond, honte publique.</td>
+                    <td>Ce que risque Scarlett en transgressant les codes sociaux du vieux Sud.</td>
+                </tr>
+                <tr>
+                    <td>Turpitude</td>
+                    <td>Ignominie, bassesse morale inspirant le mépris.</td>
+                    <td>Ce dont est accusé Rhett Butler par la bonne société d'Atlanta.</td>
+                </tr>
+                <tr>
+                    <td>Obséquieux</td>
+                    <td>Qui pousse la complaisance, la flatterie jusqu'à la servilité.</td>
+                    <td>Attitude adoptée par certains personnages pour s'attirer les faveurs des Yankees.</td>
+                </tr>
+                <tr>
+                    <td>Pusillanime</td>
+                    <td>Qui manque de courage, de résolution.</td>
+                    <td>Ce que Scarlett refuse d'être, contrairement à de nombreuses dames du Sud.</td>
+                </tr>
+                <tr>
+                    <td>Grandiloquence</td>
+                    <td>Caractère d'un discours, d'un style emphatique, pompeux.</td>
+                    <td>Marque la rhétorique des Sudistes exaltant leur cause avant la guerre.</td>
+                </tr>
+                <tr>
+                    <td>Déliquescence</td>
+                    <td>État de ce qui se décompose, se désagrège ; décadence.</td>
+                    <td>Évoque la décomposition de l'ordre social sudiste après la défaite.</td>
+                </tr>
+                <tr>
+                    <td>Iconoclaste</td>
+                    <td>Qui s'attaque aux traditions, aux valeurs établies.</td>
+                    <td>Caractère de Rhett Butler, qui refuse les conventions sociales hypocrites.</td>
+                </tr>
+            </table>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Métaphores et symbolisme du vent</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Le titre même du roman, "Autant en emporte le vent" (traduction libre de "Gone with the Wind"), est tiré d'un poème d'Ernest Dowson, "Non Sum Qualis eram Bonae Sub Regno Cynarae" : "I have forgot much, Cynara! gone with the wind, Flung roses, roses riotously with the throng".</p>
+                    <p>Cette image puissante du vent qui emporte tout sur son passage symbolise les forces historiques irrésistibles qui balaient l'ancien Sud. Le vent représente à la fois la guerre elle-même, le changement inexorable, et la fragilité des constructions humaines face aux tourments de l'Histoire.</p>
+                    <p>Le vent apparaît à plusieurs moments clés du récit, notamment lors de l'incendie d'Atlanta, où il attise les flammes qui dévorent la ville, métaphore de la destruction d'un monde. Cette symbolique est renforcée par l'opposition entre deux mondes : celui, disparu, de la grâce aristocratique du Sud d'avant-guerre, et celui, naissant, plus dur et plus pragmatique, de l'Amérique industrielle.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="analyse" class="section">
+            <h2>Analyse littéraire et critique</h2>
+            
+            <h3>Une œuvre monumentale à la croisée des genres</h3>
+            <p><em>Autant en emporte le vent</em> se situe au confluent de plusieurs traditions littéraires : le roman historique, la saga familiale, le bildungsroman (roman d'apprentissage), et le roman sentimental. Cette hybridité contribue à sa richesse et explique en partie son succès phénoménal. Mitchell parvient à entrelacer l'histoire intime de ses personnages avec la grande Histoire, créant une fresque où le destin individuel se mêle aux bouleversements collectifs.</p>
+            
+            <div class="comparison">
+                <h4>Technique narrative et structure</h4>
+                <p>Le roman se caractérise par une narration omnisciente qui privilégie néanmoins le point de vue de Scarlett, nous donnant accès à ses pensées les plus intimes. Cette focalisation permet au lecteur de suivre l'évolution psychologique de l'héroïne tout en lui faisant partager sa vision limitée et souvent erronée des autres personnages, notamment Rhett et Ashley.</p>
+                <button class="comparison-button">Approfondir l'analyse narrative</button>
+                <div class="comparison-content">
+                    <p>La structure du roman suit une progression chronologique qui épouse les grandes phases de la guerre et de la Reconstruction, avec des ellipses temporelles qui accentuent les transformations des personnages et de leur environnement. On peut identifier trois grandes parties :</p>
+                    <ul>
+                        <li>Le monde d'avant-guerre, présenté comme un Eden aristocratique malgré ses failles</li>
+                        <li>La guerre et ses bouleversements, période de chaos qui révèle la véritable nature des personnages</li>
+                        <li>La Reconstruction, où se joue la redéfinition des identités et des relations de pouvoir</li>
+                    </ul>
+                    <p>Cette architecture narrative reflète la trajectoire d'une civilisation, de son apogée à sa chute puis à sa transformation. Le style de Mitchell, direct et vivant, mêle descriptions minutieuses, dialogues incisifs et introspections psychologiques. Son écriture visuelle annonce déjà l'adaptation cinématographique qui suivra.</p>
+                </div>
+            </div>
+            
+            <h3>Un portrait de femme révolutionnaire</h3>
+            <p>La modernité du roman réside en grande partie dans son portrait sans concession de Scarlett O'Hara, anti-héroïne complexe qui défie les conventions du roman féminin de l'époque. Ni entièrement sympathique ni totalement antipathique, Scarlett est une survivante dont l'égoïsme et l'ambition sont présentés sans jugement moral appuyé.</p>
+            
+            <div class="image-container">
+                <img src="/api/placeholder/400/250" alt="Plantation de Tara dans le film">
+                <!-- Mots-clés pour l'image: "plantation Tara décor film Autant en emporte le vent demeure sud états-unis" -->
+                <div class="image-caption">Tara, la plantation des O'Hara, symbole de l'attachement à la terre dans le roman</div>
+            </div>
+            
+            <p>Dans une Amérique encore victorienne, Mitchell crée un personnage féminin qui prend en main son destin économique, dirige des entreprises, manipule les hommes, et refuse le rôle passif assigné aux femmes de son temps. Plus remarquable encore, elle ne punit pas son héroïne par une rédemption conventionnelle ou une fin tragique, mais lui laisse la possibilité d'un nouveau départ.</p>
+            
+            <div class="political-analysis">
+                <h4>Politique et idéologie dans le roman</h4>
+                <p>Malgré sa vision nostalgique du Sud d'avant-guerre, Mitchell subvertit subtilement certains mythes du "Lost Cause". À travers Rhett, elle critique l'aveuglement des Sudistes quant à leur infériorité militaire et industrielle. Par le parcours de Scarlett, elle remet en question l'idéal féminin de la "Southern Belle", en montrant qu'il s'agit avant tout d'une performance sociale qui masque des réalités plus complexes.</p>
+                <p>Cependant, l'œuvre reste profondément ancrée dans une vision paternaliste de l'esclavage et des relations raciales. Les personnages noirs, bien qu'individualisés, correspondent largement aux stéréotypes de l'époque, et la terreur du Ku Klux Klan est justifiée comme une nécessité pour protéger les femmes blanches.</p>
+                <p>Ce paradoxe idéologique – progressiste sur les questions de genre, réactionnaire sur les questions raciales – reflète les tensions de l'Amérique des années 1930, où le féminisme gagnait du terrain tandis que la ségrégation restait fermement établie.</p>
+            </div>
+            
+            <h3>Réception critique et controverses</h3>
+            <p>Dès sa publication, <em>Autant en emporte le vent</em> connut un succès commercial stupéfiant, remportant le prix Pulitzer en 1937. Les critiques saluèrent généralement la fresque historique et la puissance narrative, tout en relevant parfois un certain romantisme dans la vision du vieux Sud.</p>
+            
+            <p>Au fil des décennies, avec l'évolution des sensibilités, le roman a fait l'objet de critiques de plus en plus vives concernant sa représentation de l'esclavage et des Afro-Américains. Si certains défendent l'œuvre comme un produit de son temps qui reflète les mentalités d'une époque, d'autres soulignent sa participation à la mythologie du "Lost Cause" qui a contribué à justifier la ségrégation raciale au XXe siècle.</p>
+            
+            <p>Le débat autour de l'œuvre de Mitchell s'inscrit dans une réflexion plus large sur la façon dont nous lisons et interprétons aujourd'hui les classiques littéraires imprégnés de valeurs que nous ne partageons plus, sans pour autant nier leur importance historique et leur valeur esthétique.</p>
+        </section>
+        
+        <section id="debat" class="section">
+            <h2>Pour débattre : visions du monde en conflit</h2>
+            
+            <div class="highlight-box">
+                "Autant en emporte le vent" met en scène l'affrontement entre différentes visions du monde : traditionnel vs moderne, agraire vs industriel, aristocratique vs démocratique. Ces tensions résonnent avec les débats politiques contemporains.
+            </div>
+            
+            <h3>Tradition contre modernité : un débat toujours d'actualité</h3>
+            
+            <div class="comparison">
+                <h4>Le dilemme des sociétés en transformation</h4>
+                <p>Le roman illustre la tension entre la préservation des traditions et l'adaptation aux nouvelles réalités économiques et sociales, un dilemme qui traverse l'histoire politique mondiale.</p>
+                <button class="comparison-button">Explorer les parallèles contemporains</button>
+                <div class="comparison-content">
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <div style="flex: 1; min-width: 280px; background-color: #f0f5f0; padding: 15px; border-radius: 8px;">
+                            <h5 style="color: #2e7d32;">Vision conservatrice :</h5>
+                            <p>Représentée par les personnages qui restent attachés aux valeurs du vieux Sud : honneur, hiérarchie sociale, modes de vie traditionnels.</p>
+                            <p>Résonne avec les mouvements contemporains qui valorisent :</p>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>La préservation des identités culturelles nationales</li>
+                                <li>La méfiance envers la mondialisation</li>
+                                <li>L'importance des structures sociales traditionnelles</li>
+                                <li>La valorisation du local face au global</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; min-width: 280px; background-color: #f0f5f7; padding: 15px; border-radius: 8px;">
+                            <h5 style="color: #1c3c48;">Vision progressiste :</h5>
+                            <p>Incarnée par Rhett Butler et, partiellement, par Scarlett : adaptabilité, pragmatisme, rejet des conventions obsolètes.</p>
+                            <p>Fait écho aux tendances actuelles prônant :</p>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>L'ouverture économique et l'innovation</li>
+                                <li>La remise en question des hiérarchies établies</li>
+                                <li>L'individualisme et la méritocratie</li>
+                                <li>L'adaptation aux nouvelles réalités globales</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px;">Ce conflit entre conservation et changement se manifeste aujourd'hui dans des débats politiques comme ceux sur l'intégration européenne (souveraineté nationale vs projet fédéral), sur l'immigration (préservation de l'identité vs ouverture multiculturelle), ou sur la mondialisation économique.</p>
+                    <p>La France elle-même est traversée par cette tension, entre l'attachement à son exception culturelle et à son modèle social d'une part, et la nécessité de s'adapter aux réalités économiques globales d'autre part.</p>
+                </div>
+            </div>
+            
+            <div class="political-analysis">
+                <h4>La question de la mémoire historique</h4>
+                <p>"Autant en emporte le vent" s'inscrit dans la mythologie du "Lost Cause", vision révisionniste de la guerre de Sécession qui minimise le rôle de l'esclavage et idéalise la société sudiste. Cette reconstruction narrative du passé pose la question universelle du rapport entre histoire et mémoire.</p>
+                <p>On retrouve des phénomènes similaires dans de nombreux contextes :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 10px;">
+                    <li>Les débats sur la colonisation et ses héritages en France</li>
+                    <li>Les controverses autour des monuments historiques liés à des périodes problématiques</li>
+                    <li>Les différentes interprétations nationales de conflits comme la Seconde Guerre mondiale en Europe</li>
+                    <li>La question de la repentance et des réparations pour les injustices historiques</li>
+                </ul>
+                <p>Ces controverses révèlent comment la mémoire collective est un champ de bataille politique où se jouent les identités contemporaines. Le roman de Mitchell, à la fois œuvre littéraire remarquable et document sur une certaine vision de l'histoire américaine, continue de susciter ces débats essentiels.</p>
+            </div>
+            
+            <h3>La place des femmes : émancipation et contraintes</h3>
+            <p>Le parcours de Scarlett illustre les contradictions du féminisme naissant : elle s'émancipe économiquement et rejette certaines conventions, mais reste prisonnière d'autres schémas, notamment dans sa vie amoureuse. Son indépendance est née de la nécessité plus que d'une revendication idéologique.</p>
+            
+            <p>Cette ambivalence fait écho aux débats contemporains sur l'égalité des genres : entre l'émancipation économique des femmes et la persistance de structures patriarcales plus subtiles, entre l'affirmation de l'indépendance féminine et les pressions sociales contradictoires.</p>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Comment lire aujourd'hui une œuvre aux dimensions problématiques ?</div>
+                <div class="flashcard-answer">
+                    <p>La lecture contemporaine d'"Autant en emporte le vent" soulève la question fondamentale de notre rapport aux œuvres du passé : faut-il les juger selon nos critères moraux actuels ou les comprendre dans leur contexte historique ?</p>
+                    <p>Plusieurs approches sont possibles :</p>
+                    <ul style="list-style-type: circle; padding-left: 20px; margin-top: 10px;">
+                        <li><strong>La lecture contextuelle</strong> : comprendre l'œuvre dans son époque, comme témoignage d'une vision du monde historiquement située</li>
+                        <li><strong>La lecture critique</strong> : apprécier les qualités littéraires tout en identifiant les biais idéologiques et les représentations problématiques</li>
+                        <li><strong>La lecture comparée</strong> : mettre en perspective avec d'autres œuvres offrant des points de vue différents sur les mêmes événements</li>
+                    </ul>
+                    <p>Cette question dépasse le cadre littéraire pour toucher à notre rapport à l'histoire en général : comment hériter d'un passé imparfait sans le rejeter entièrement ni l'accepter sans discernement ?</p>
+                </div>
+            </div>
+            
+            <div class="citation">
+                <p>"Un pays sans mémoire est un pays sans avenir."</p>
+                <p>— Cette citation d'Aimé Césaire nous rappelle l'importance de confronter les pages sombres de l'histoire, comme l'esclavage aux États-Unis ou le colonialisme en France, tout en reconnaissant la complexité des héritages culturels.</p>
+            </div>
+        </section>
+        
+        <section id="recommandations" class="section">
+            <h2>Recommandations de lectures et films</h2>
+            
+            <p>Pour approfondir les thèmes et le contexte d'"Autant en emporte le vent", voici une sélection d'œuvres qui entrent en résonance avec le roman de Margaret Mitchell, présentées par affinités thématiques :</p>
+            
+            <div class="carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide">
+                        <h3>Livres américains sur la même période</h3>
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 120px;">
+                            <img src="/api/placeholder/120/180" alt="Couverture de La Case de l'Oncle Tom">
+                            <!-- Mots-clés pour l'image: "couverture livre Case Oncle Tom Harriet Beecher Stowe édition française" -->
+                        </div>
+                        <div class="book-card">
+                            <h5>La Case de l'Oncle Tom (1852)</h5>
+                            <p><strong>Harriet Beecher Stowe</strong></p>
+                            <p>Roman anti-esclavagiste contemporain de la période antebellum qui offre un contrepoint saisissant à la vision de Mitchell. Lincoln aurait dit de l'auteure qu'elle était "la petite dame qui a déclenché cette grande guerre".</p>
+                        </div>
+                        
+                        <div class="book-card">
+                            <h5>Sartoris (1929)</h5>
+                            <p><strong>William Faulkner</strong></p>
+                            <p>Premier roman du cycle de Yoknapatawpha, qui explore lui aussi le Sud d'après-guerre et la déchéance des anciennes familles aristocratiques, mais avec une approche moderniste et une complexité psychologique encore plus grande.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-slide">
+                        <h3>Œuvres sur des sociétés en transformation</h3>
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 120px;">
+                            <img src="/api/placeholder/120/180" alt="Couverture des Raisins de la colère">
+                            <!-- Mots-clés pour l'image: "couverture livre Raisins colère John Steinbeck édition française" -->
+                        </div>
+                        <div class="book-card">
+                            <h5>Les Raisins de la colère (1939)</h5>
+                            <p><strong>John Steinbeck</strong></p>
+                            <p>Chef-d'œuvre publié trois ans après celui de Mitchell, qui dépeint lui aussi une Amérique en crise, mais du point de vue des fermiers pauvres pendant la Grande Dépression. Le thème de la survie et de l'attachement à la terre y résonne fortement.</p>
+                        </div>
+                        
+                        <div class="book-card">
+                            <h5>Les Hommes de bonne volonté (1932-1946)</h5>
+                            <p><strong>Jules Romains</strong></p>
+                            <p>Vaste fresque romanesque française en 27 volumes qui couvre la période 1908-1933. Comme Mitchell, Romains peint une société en transformation à travers une multitude de personnages.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-slide">
+                        <h3>Films et adaptations essentiels</h3>
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 120px;">
+                            <img src="/api/placeholder/120/180" alt="Affiche du film Autant en emporte le vent">
+                            <!-- Mots-clés pour l'image: "affiche film Autant en emporte le vent 1939 Vivien Leigh Clark Gable" -->
+                        </div>
+                        <div class="film-card">
+                            <h5>Autant en emporte le vent (1939)</h5>
+                            <p><strong>Réalisateur : Victor Fleming</strong></p>
+                            <p>L'adaptation classique avec Vivien Leigh et Clark Gable reste un monument du cinéma hollywoodien. Ses 8 Oscars et son succès commercial inégalé en font un phénomène culturel comparable au roman.</p>
+                        </div>
+                        
+                        <div class="film-card">
+                            <h5>Glory (1989)</h5>
+                            <p><strong>Réalisateur : Edward Zwick</strong></p>
+                            <p>Film qui raconte l'histoire du 54e régiment du Massachusetts, composé de soldats noirs pendant la guerre de Sécession, offrant une perspective absente du roman de Mitchell.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-slide">
+                        <h3>Perspectives contemporaines</h3>
+                        <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 120px;">
+                            <img src="/api/placeholder/120/180" alt="Couverture de La Couleur des sentiments">
+                            <!-- Mots-clés pour l'image: "couverture livre La Couleur des sentiments Kathryn Stockett édition française" -->
+                        </div>
+                        <div class="book-card">
+                            <h5>La Couleur des sentiments (2009)</h5>
+                            <p><strong>Kathryn Stockett</strong></p>
+                            <p>Roman situé dans le Mississippi des années 1960 qui donne voix aux domestiques noires travaillant pour des familles blanches, offrant une perspective qui manque cruellement chez Mitchell.</p>
+                        </div>
+                        
+                        <div class="film-card">
+                            <h5>Douze ans d'esclavage (2013)</h5>
+                            <p><strong>Réalisateur : Steve McQueen</strong></p>
+                            <p>Adaptation des mémoires de Solomon Northup, homme libre réduit en esclavage. Ce film brutal démystifie la vision idyllique de l'esclavage présentée dans "Autant en emporte le vent".</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-nav">
+                    <button class="carousel-button" id="prev-btn">Précédent</button>
+                    <button class="carousel-button" id="next-btn">Suivant</button>
+                </div>
+                
+                <div class="carousel-dots">
+                    <span class="carousel-dot active" data-slide="0"></span>
+                    <span class="carousel-dot" data-slide="1"></span>
+                    <span class="carousel-dot" data-slide="2"></span>
+                    <span class="carousel-dot" data-slide="3"></span>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>Spécial pour les amateurs de San Antonio et Frédéric Dard</h4>
+                <p>Si vous appréciez l'humour noir et le style acéré de San Antonio, ces œuvres pourraient vous intéresser :</p>
+                <div class="image-container" style="float: right; margin: 0 0 15px 15px; width: 100px;">
+                    <img src="/api/placeholder/100/140" alt="Portrait de Frédéric Dard">
+                    <!-- Mots-clés pour l'image: "portrait Frédéric Dard San Antonio écrivain français" -->
+                </div>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 10px;">
+                    <li><strong>Les Désirs et les Morts</strong> (1953) de Frédéric Dard — Un roman noir plus "sérieux" que ses San Antonio, avec une profondeur psychologique qui rappelle par moments celle de Mitchell</li>
+                    <li><strong>L'Histoire de France vue par San-Antonio</strong> — Pour ceux qui apprécient son regard caustique sur le monde, appliqué ici à l'histoire</li>
+                    <li><strong>Brèves de comptoir</strong> de Jean-Marie Gourio — Cette série offre un humour populaire et une galerie de personnages hauts en couleur qui pourraient plaire aux amateurs de Frédéric Dard</li>
+                </ul>
+            </div>
+            
+            <div class="recommendation">
+                <h4>Pour les amateurs de littérature française</h4>
+                <p>Si vous appréciez les fresques historiques comme "Autant en emporte le vent", ces œuvres françaises pourraient vous intéresser :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 10px;">
+                    <li><strong>Germinal</strong> d'Émile Zola — Une autre vision de la transformation sociale et des bouleversements économiques au XIXe siècle</li>
+                    <li><strong>La Semaine sainte</strong> d'Aragon — Roman historique sur la chute de l'Empire napoléonien, autre moment de transformation d'un monde</li>
+                    <li><strong>Les Thibault</strong> de Roger Martin du Gard — Saga familiale qui dépeint la société française de la Belle Époque à la Première Guerre mondiale</li>
+                    <li><strong>Suite française</strong> d'Irène Némirovsky — Fresque inachevée sur la France de 1940-1941, qui capture elle aussi un monde en plein effondrement</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Conclusion</h2>
+            <p><em>Autant en emporte le vent</em> demeure, malgré ses aspects problématiques, une œuvre monumentale de la littérature américaine et mondiale. Sa puissance narrative, ses personnages inoubliables et sa fresque historique en font un témoignage fascinant d'une époque révolue.</p>
+            
+            <p>Le roman de Margaret Mitchell peut être lu à plusieurs niveaux : comme une grande histoire d'amour, comme un récit de survie et de transformation personnelle, comme une chronique historique d'un monde qui s'effondre, ou comme un document révélateur des mentalités américaines des années 1930 concernant la guerre de Sécession et ses conséquences.</p>
+            
+            <p>Sa complexité réside précisément dans cette ambivalence : œuvre profondément conservatrice dans sa vision raciale et sociale, mais paradoxalement moderne dans son portrait d'une femme qui refuse d'être victime des circonstances. Cette tension en fait un objet de débat perpétuel, toujours pertinent pour comprendre les contradictions de l'histoire américaine et, par extension, de toute société confrontée aux bouleversements de la modernité.</p>
+            
+            <div class="citation">
+                <p>"Après tout, demain est un autre jour."</p>
+                <p>Cette phrase finale de Scarlett incarne l'optimisme tenace et la capacité de résilience qui sont peut-être le véritable héritage de ce classique intemporel.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Toggle vocabulary terms
+        document.querySelectorAll('.term-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const term = this.parentElement;
+                term.classList.toggle('active');
+                const toggle = this.querySelector('.toggle');
+                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+        
+        // Toggle comparisons
+        document.querySelectorAll('.comparison-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    this.textContent = 'Approfondir l\'analyse';
+                } else {
+                    content.style.display = 'block';
+                    this.textContent = 'Réduire l\'analyse';
+                }
+            });
+        });
+        
+        // Toggle flashcards
+        document.querySelectorAll('.flashcard-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const flashcard = this.parentElement;
+                flashcard.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Auto-open first term and flashcard for demonstration
+        setTimeout(() => {
+            document.querySelector('.term').classList.add('active');
+            document.querySelector('.term .toggle').textContent = '▲';
+            document.querySelector('.flashcard').classList.add('active');
+        }, 500);
+    
+    <script>
+        // Toggle vocabulary terms
+        document.querySelectorAll('.term-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const term = this.parentElement;
+                term.classList.toggle('active');
+                const toggle = this.querySelector('.toggle');
+                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+        
+        // Toggle comparisons
+        document.querySelectorAll('.comparison-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    this.textContent = 'Approfondir l\'analyse';
+                } else {
+                    content.style.display = 'block';
+                    this.textContent = 'Réduire l\'analyse';
+                }
+            });
+        });
+        
+        // Toggle flashcards
+        document.querySelectorAll('.flashcard-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const flashcard = this.parentElement;
+                flashcard.classList.toggle('active');
+            });
+        });
+        
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionItem = this.parentElement;
+                accordionItem.classList.toggle('active');
+                const toggle = this.querySelector('.toggle');
+                if (toggle) {
+                    toggle.textContent = accordionItem.classList.contains('active') ? '▲' : '▼';
+                }
+            });
+        });
+        
+        // Carousel functionality
+        const carousel = document.querySelector('.carousel-container');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        let currentIndex = 0;
+        const slideWidth = 100; // 100%
+        
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+            
+            // Update active dot
+            dots.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // Event listeners for navigation buttons
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+        
+        // Event listeners for dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+            });
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Auto-open first term and flashcard for demonstration
+        setTimeout(() => {
+            document.querySelector('.term').classList.add('active');
+            const toggle = document.querySelector('.term .toggle');
+            if (toggle) toggle.textContent = '▲';
+            document.querySelector('.flashcard').classList.add('active');
+        }, 500);
+        
+        // Touch events for mobile devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX) {
+                // Swipe left, go next
+                nextBtn.click();
+            } else if (touchEndX > touchStartX) {
+                // Swipe right, go previous
+                prevBtn.click();
+            }
+        }
+    </script>
+</body>
+</html>
