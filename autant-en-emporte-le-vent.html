@@ -1255,67 +1255,73 @@
         </section>
     </div>
 
-    <script>
-        // Toggle vocabulary terms
-        document.querySelectorAll('.term-header').forEach(header => {
-            header.addEventListener('click', function() {
-                const term = this.parentElement;
-                term.classList.toggle('active');
-                const toggle = this.querySelector('.toggle');
-                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
-            });
+<!-- Remplacez la section des scripts à la fin du document par ceci -->
+<script>
+    // Toggle vocabulary terms
+    document.querySelectorAll('.term-header').forEach(header => {
+        header.addEventListener('click', function() {
+            const term = this.parentElement;
+            term.classList.toggle('active');
+            const toggle = this.querySelector('.toggle');
+            toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
         });
-        
-        // Toggle comparisons
-        document.querySelectorAll('.comparison-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                if (content.style.display === 'block') {
-                    content.style.display = 'none';
-                    this.textContent = 'Approfondir l\'analyse';
-                } else {
-                    content.style.display = 'block';
-                    this.textContent = 'Réduire l\'analyse';
-                }
-            });
-        });
-        
-        // Toggle flashcards
-        document.querySelectorAll('.flashcard-question').forEach(question => {
-            question.addEventListener('click', function() {
-                const flashcard = this.parentElement;
-                flashcard.classList.toggle('active');
-            });
-        });
-        
-        // Smooth scroll for navigation
-        document.querySelectorAll('.nav-item').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                window.scrollTo({
-                    top: targetElement.offsetTop - 70,
-                    behavior: 'smooth'
-                });
-            });
-        });
-        
-        // Auto-open first term and flashcard for demonstration
-        setTimeout(() => {
-            document.querySelector('.term').classList.add('active');
-            document.querySelector('.term .toggle').textContent = '▲';
-            document.querySelector('.flashcard').classList.add('active');
-        }, 500);
+    });
     
-    <script>
+    // Toggle comparisons
+    document.querySelectorAll('.comparison-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                this.textContent = 'Approfondir l\'analyse';
+            } else {
+                content.style.display = 'block';
+                this.textContent = 'Réduire l\'analyse';
+            }
+        });
+    });
+    
+    // Toggle flashcards
+    document.querySelectorAll('.flashcard-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const flashcard = this.parentElement;
+            flashcard.classList.toggle('active');
+        });
+    });
+    
+    // Smooth scroll for navigation
+    document.querySelectorAll('.nav-item').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            window.scrollTo({
+                top: targetElement.offsetTop - 70,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Auto-open first term and flashcard for demonstration
+    setTimeout(() => {
+        document.querySelector('.term').classList.add('active');
+        document.querySelector('.term .toggle').textContent = '▲';
+        document.querySelector('.flashcard').classList.add('active');
+    }, 500);
+</script>
+
+<script>
+    // Attendons que le DOM soit complètement chargé avant d'exécuter le script
+    document.addEventListener('DOMContentLoaded', function() {
         // Toggle vocabulary terms
         document.querySelectorAll('.term-header').forEach(header => {
             header.addEventListener('click', function() {
                 const term = this.parentElement;
                 term.classList.toggle('active');
                 const toggle = this.querySelector('.toggle');
-                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+                if (toggle) {
+                    toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+                }
             });
         });
         
@@ -1355,45 +1361,74 @@
         
         // Carousel functionality
         const carousel = document.querySelector('.carousel-container');
-        const slides = document.querySelectorAll('.carousel-slide');
-        const dots = document.querySelectorAll('.carousel-dot');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        
-        let currentIndex = 0;
-        const slideWidth = 100; // 100%
-        
-        function updateCarousel() {
-            carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+        if (carousel) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
             
-            // Update active dot
+            let currentIndex = 0;
+            const slideWidth = 100; // 100%
+            
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+                
+                // Update active dot
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Event listeners for navigation buttons
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    updateCarousel();
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    updateCarousel();
+                });
+            }
+            
+            // Event listeners for dots
             dots.forEach((dot, index) => {
-                if (index === currentIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
+                dot.addEventListener('click', function() {
+                    currentIndex = index;
+                    updateCarousel();
+                });
+            });
+            
+            // Touch events for mobile devices
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carousel.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            carousel.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX) {
+                    // Swipe left, go next
+                    if (nextBtn) nextBtn.click();
+                } else if (touchEndX > touchStartX) {
+                    // Swipe right, go previous
+                    if (prevBtn) prevBtn.click();
                 }
-            });
+            }
         }
-        
-        // Event listeners for navigation buttons
-        nextBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            updateCarousel();
-        });
-        
-        prevBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            updateCarousel();
-        });
-        
-        // Event listeners for dots
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                updateCarousel();
-            });
-        });
         
         // Smooth scroll for navigation
         document.querySelectorAll('.nav-item').forEach(anchor => {
@@ -1401,43 +1436,40 @@
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                window.scrollTo({
-                    top: targetElement.offsetTop - 70,
-                    behavior: 'smooth'
-                });
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
         
         // Auto-open first term and flashcard for demonstration
-        setTimeout(() => {
-            document.querySelector('.term').classList.add('active');
-            const toggle = document.querySelector('.term .toggle');
+        const firstTerm = document.querySelector('.term');
+        if (firstTerm) {
+            firstTerm.classList.add('active');
+            const toggle = firstTerm.querySelector('.toggle');
             if (toggle) toggle.textContent = '▲';
-            document.querySelector('.flashcard').classList.add('active');
-        }, 500);
-        
-        // Touch events for mobile devices
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        carousel.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        carousel.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            if (touchEndX < touchStartX) {
-                // Swipe left, go next
-                nextBtn.click();
-            } else if (touchEndX > touchStartX) {
-                // Swipe right, go previous
-                prevBtn.click();
-            }
         }
-    </script>
+        
+        const firstFlashcard = document.querySelector('.flashcard');
+        if (firstFlashcard) {
+            firstFlashcard.classList.add('active');
+        }
+        
+        // Ensure flip cards work on touch devices
+        document.querySelectorAll('.flip-card').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.querySelector('.flip-card-inner').style.transform = 
+                    this.querySelector('.flip-card-inner').style.transform === 'rotateY(180deg)' 
+                    ? 'rotateY(0deg)' 
+                    : 'rotateY(180deg)';
+            });
+        });
+        
+        console.log('Tous les scripts d\'interactivité ont été chargés avec succès');
+    });
+</script>
 </body>
 </html>
