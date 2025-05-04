@@ -141,6 +141,28 @@
             margin: 20px 0;
         }
         
+        .debug-info {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            display: none; /* Caché par défaut */
+        }
+        
+        .debug-toggle {
+            background-color: #eee;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        
         @media (max-width: 768px) {
             .fiches-container {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -186,6 +208,9 @@
                 <p>Chargement des fiches de lecture...</p>
             </div>
         </div>
+        
+        <div id="debug-info" class="debug-info"></div>
+        <button id="debug-toggle" class="debug-toggle" style="display: none;">Afficher les infos de débogage</button>
     </div>
 
     <script>
@@ -211,60 +236,150 @@
             excludeFiles: ['index.html', 'README.html', '404.html'],
             
             // Activer les logs de débogage (true/false)
-            debug: true
+            debug: true,
+            
+            // Afficher les informations de débogage dans la page (true/false)
+            debugInPage: true
         };
         
-        // CODE PRINCIPAL - NE PAS MODIFIER
+        // CODE PRINCIPAL - MODIFIÉ POUR PLUS DE ROBUSTESSE
         document.addEventListener('DOMContentLoaded', function() {
             const DEBUG = CONFIG.debug;
+            const debugInfo = [];
             
             function debugLog(...args) {
-                if (DEBUG) console.log('[Index Fiches]', ...args);
+                const message = args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' ');
+                
+                if (DEBUG) {
+                    console.log('[Index Fiches]', ...args);
+                    
+                    // Stocker pour l'affichage en page si activé
+                    if (CONFIG.debugInPage) {
+                        debugInfo.push(message);
+                        updateDebugDisplay();
+                    }
+                }
             }
             
-            // Extraction des informations d'une fiche HTML
+            function updateDebugDisplay() {
+                const debugElement = document.getElementById('debug-info');
+                if (debugElement) {
+                    debugElement.textContent = debugInfo.join('\n');
+                }
+                
+                // Afficher le bouton de toggle
+                const toggleButton = document.getElementById('debug-toggle');
+                if (toggleButton && debugInfo.length > 0) {
+                    toggleButton.style.display = 'block';
+                }
+            }
+            
+            // Toggle pour afficher/masquer les infos de débogage
+            const toggleButton = document.getElementById('debug-toggle');
+            const debugElement = document.getElementById('debug-info');
+            
+            if (toggleButton && debugElement) {
+                toggleButton.addEventListener('click', function() {
+                    const isVisible = debugElement.style.display === 'block';
+                    debugElement.style.display = isVisible ? 'none' : 'block';
+                    toggleButton.textContent = isVisible 
+                        ? 'Afficher les infos de débogage' 
+                        : 'Masquer les infos de débogage';
+                });
+            }
+            
+            // Extraction des informations d'une fiche HTML - Version améliorée
             async function extractBookInfo(htmlContent, filename) {
                 debugLog(`Extraction des infos depuis ${filename}`);
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlContent, 'text/html');
                 
+                // Extraction du titre - Améliorée
                 let title = '';
-                let author = '';
-                let description = 'Fiche de lecture détaillée avec résumé, contexte, personnages et analyse.';
-                
-                // Tenter d'extraire le titre principal
                 const h1Element = doc.querySelector('h1');
                 if (h1Element) {
                     title = h1Element.textContent.trim();
-                    debugLog(`Titre trouvé: "${title}"`);
+                    debugLog(`Titre trouvé via h1: "${title}"`);
+                } else {
+                    // Chercher d'autres éléments qui pourraient contenir le titre
+                    const titleElement = doc.querySelector('title') || 
+                                      doc.querySelector('h2') ||
+                                      doc.querySelector('header strong');
+                    if (titleElement) {
+                        title = titleElement.textContent.trim();
+                        debugLog(`Titre trouvé via élément alternatif: "${title}"`);
+                    }
                 }
                 
-                // Tenter d'extraire l'auteur depuis la sous-titre
+                // Extraction de l'auteur - Améliorée
+                let author = '';
                 const subtitleElement = doc.querySelector('.subtitle');
                 if (subtitleElement) {
                     const subtitleText = subtitleElement.textContent.trim();
                     debugLog(`Sous-titre trouvé: "${subtitleText}"`);
                     
-                    // Extraire l'auteur (généralement au format "de/d' [Auteur] - Fiche de lecture")
-                    const authorMatch = subtitleText.match(/d[e']?\s+([\w\s\.\-]+)(\s+-|$)/i);
-                    if (authorMatch && authorMatch[1]) {
-                        author = authorMatch[1].trim();
-                        debugLog(`Auteur extrait: "${author}"`);
+                    // Essayer plusieurs patterns pour extraire l'auteur
+                    const authorPatterns = [
+                        /d[e']?\s+([\w\s\.\-]+)(\s+-|$)/i,  // "de Victor Hugo - Fiche"
+                        /par\s+([\w\s\.\-]+)(\s+|$)/i,      // "par Victor Hugo"
+                        /([\w\s\.\-]+)(\s+-\s+|$)/i         // "Victor Hugo - Fiche"
+                    ];
+                    
+                    let authorFound = false;
+                    for (const pattern of authorPatterns) {
+                        const match = subtitleText.match(pattern);
+                        if (match && match[1]) {
+                            author = match[1].trim();
+                            authorFound = true;
+                            debugLog(`Auteur extrait avec pattern: "${author}"`);
+                            break;
+                        }
+                    }
+                    
+                    if (!authorFound) {
+                        // Si aucun pattern ne correspond, utiliser tout le texte du sous-titre
+                        author = subtitleText;
+                        debugLog(`Utilisation du sous-titre complet comme auteur: "${author}"`);
+                    }
+                } else {
+                    // Chercher d'autres éléments qui pourraient contenir l'auteur
+                    const authorElement = doc.querySelector('[itemprop="author"]') || 
+                                        doc.querySelector('.author') ||
+                                        doc.querySelector('header em');
+                    if (authorElement) {
+                        author = authorElement.textContent.trim();
+                        debugLog(`Auteur trouvé via élément alternatif: "${author}"`);
                     }
                 }
                 
-                // Tenter d'extraire une brève description du livre
-                const resumeSection = doc.querySelector('#resume');
-                if (resumeSection) {
-                    const highlightBox = resumeSection.querySelector('.highlight-box');
-                    if (highlightBox) {
-                        description = highlightBox.textContent.trim();
-                        debugLog(`Description extraite de highlight-box: "${description.substring(0, 50)}..."`);
-                    } else {
-                        const firstParagraph = resumeSection.querySelector('p');
-                        if (firstParagraph) {
-                            description = firstParagraph.textContent.trim();
-                            debugLog(`Description extraite du premier paragraphe: "${description.substring(0, 50)}..."`);
+                // Extraction de la description - Améliorée
+                let description = 'Fiche de lecture détaillée avec résumé, contexte, personnages et analyse.';
+                
+                // Essayer plusieurs emplacements pour la description
+                const descriptionSelectors = [
+                    '#resume .highlight-box',
+                    '#resume p:first-of-type',
+                    '.resume p:first-of-type',
+                    '.description',
+                    'meta[name="description"]',
+                    '#introduction p:first-of-type',
+                    'article p:first-of-type'
+                ];
+                
+                for (const selector of descriptionSelectors) {
+                    const element = doc.querySelector(selector);
+                    if (element) {
+                        // Pour les meta tags, utiliser l'attribut content
+                        const content = element.tagName === 'META' 
+                            ? element.getAttribute('content')
+                            : element.textContent;
+                            
+                        if (content && content.trim().length > 20) {
+                            description = content.trim();
+                            debugLog(`Description trouvée via ${selector}: "${description.substring(0, 50)}..."`);
+                            break;
                         }
                     }
                 }
@@ -278,7 +393,7 @@
                 
                 if (!author) {
                     debugLog(`Auteur non trouvé, utilisation de la valeur par défaut`);
-                    author = 'Auteur inconnu';
+                    author = 'Auteur non spécifié';
                 }
                 
                 return {
@@ -289,7 +404,7 @@
                 };
             }
             
-            // Récupérer la liste des fichiers HTML depuis l'API GitHub
+            // Récupérer la liste des fichiers HTML depuis l'API GitHub - Améliorée avec plus de détails
             async function fetchRepositoryFiles() {
                 debugLog('Récupération des fichiers depuis l\'API GitHub');
                 
@@ -303,10 +418,21 @@
                     const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?ref=${CONFIG.branch}`;
                     debugLog(`URL de l'API GitHub: ${apiUrl}`);
                     
-                    const response = await fetch(apiUrl);
+                    // Ajouter un timestamp pour éviter les problèmes de cache
+                    const fetchUrl = apiUrl + `&_=${Date.now()}`;
+                    debugLog(`URL avec anti-cache: ${fetchUrl}`);
+                    
+                    const response = await fetch(fetchUrl, {
+                        headers: {
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
                     
                     if (!response.ok) {
-                        throw new Error(`Erreur API GitHub (${response.status}): ${await response.text()}`);
+                        const errorText = await response.text();
+                        debugLog(`Erreur API GitHub (${response.status}): ${errorText}`);
+                        throw new Error(`Erreur API GitHub (${response.status}): ${errorText}`);
                     }
                     
                     const files = await response.json();
@@ -315,22 +441,45 @@
                     // Filtrer pour ne garder que les fichiers HTML
                     const htmlFiles = files.filter(file => {
                         // S'assurer que c'est un fichier et pas un dossier
-                        if (file.type !== 'file') return false;
+                        if (file.type !== 'file') {
+                            debugLog(`Ignoré: "${file.name}" (type: ${file.type})`);
+                            return false;
+                        }
                         
                         // Vérifier l'extension
                         const hasValidExtension = CONFIG.extensions.some(ext => 
                             file.name.toLowerCase().endsWith(ext.toLowerCase())
                         );
                         
+                        if (!hasValidExtension) {
+                            debugLog(`Ignoré: "${file.name}" (extension non valide)`);
+                            return false;
+                        }
+                        
                         // Vérifier si le fichier est à exclure
                         const isExcluded = CONFIG.excludeFiles.some(excluded => 
                             file.name.toLowerCase() === excluded.toLowerCase()
                         );
                         
-                        return hasValidExtension && !isExcluded;
+                        if (isExcluded) {
+                            debugLog(`Ignoré: "${file.name}" (dans la liste d'exclusion)`);
+                            return false;
+                        }
+                        
+                        debugLog(`Fichier valide: "${file.name}"`);
+                        return true;
                     });
                     
                     debugLog(`${htmlFiles.length} fichiers HTML valides trouvés`);
+                    
+                    // Si aucun fichier trouvé, afficher la liste complète des fichiers pour déboguer
+                    if (htmlFiles.length === 0 && files.length > 0) {
+                        debugLog('Liste complète des fichiers du dépôt:');
+                        files.forEach(file => {
+                            debugLog(`- ${file.name} (type: ${file.type})`);
+                        });
+                    }
+                    
                     return htmlFiles;
                     
                 } catch (error) {
@@ -339,7 +488,7 @@
                 }
             }
             
-            // Récupérer le contenu de chaque fichier et extraire les informations
+            // Récupérer le contenu de chaque fichier et extraire les informations - Améliorée avec plus de détails
             async function processFiches() {
                 try {
                     // Récupérer la liste des fichiers
@@ -360,7 +509,10 @@
                             const rawUrl = file.download_url;
                             debugLog(`URL du contenu brut: ${rawUrl}`);
                             
-                            const response = await fetch(rawUrl, {
+                            // Ajouter anti-cache
+                            const fetchUrl = rawUrl + `?_=${Date.now()}`;
+                            
+                            const response = await fetch(fetchUrl, {
                                 method: 'GET',
                                 cache: 'no-store',
                                 headers: { 'Cache-Control': 'no-cache' }
@@ -373,6 +525,12 @@
                             
                             const html = await response.text();
                             debugLog(`Contenu de ${file.name} récupéré (${html.length} caractères)`);
+                            
+                            // Vérifier si le contenu récupéré est valide
+                            if (!html || html.length < 100) {
+                                debugLog(`Contenu de ${file.name} trop court ou invalide`);
+                                return null;
+                            }
                             
                             // Extraire les informations
                             return await extractBookInfo(html, file.name);
@@ -398,7 +556,7 @@
                 }
             }
             
-            // Afficher les fiches trouvées
+            // Afficher les fiches trouvées - Améliorée avec plus d'informations
             function displayFiches(fiches) {
                 const container = document.getElementById('fiches-container');
                 container.innerHTML = ''; // Effacer le message de chargement
@@ -412,7 +570,7 @@
                                 <li>Ouvrez ce fichier <code>index.html</code> et vérifiez les paramètres dans l'objet <code>CONFIG</code></li>
                                 <li>Assurez-vous que le nom d'utilisateur et le nom du dépôt sont corrects</li>
                                 <li>Vérifiez que vous avez bien des fichiers HTML dans votre dépôt</li>
-                                <li>Consultez la console (F12) pour plus de détails sur l'erreur</li>
+                                <li>Consultez les informations de débogage pour plus de détails sur l'erreur</li>
                             </ol>
                         </div>
                     `;
@@ -427,13 +585,18 @@
                     const ficheElement = document.createElement('div');
                     ficheElement.className = 'fiche-card';
                     
+                    // Limiter la longueur de la description
+                    const description = fiche.description.length > 150 
+                        ? fiche.description.substring(0, 150) + '...' 
+                        : fiche.description;
+                    
                     ficheElement.innerHTML = `
                         <div class="fiche-header">
                             <h2 class="fiche-title">${fiche.title}</h2>
                             <div class="fiche-author">${fiche.author}</div>
                         </div>
                         <div class="fiche-content">
-                            <p class="fiche-description">${fiche.description}</p>
+                            <p class="fiche-description">${description}</p>
                             <a href="${fiche.filename}" class="fiche-link">Consulter la fiche</a>
                         </div>
                     `;
@@ -452,14 +615,16 @@
                 debugLog(`${fiches.length} fiches affichées`);
             }
             
-            // Initialisation de la page
+            // Initialisation de la page - Améliorée avec plus de robustesse
             async function init() {
                 try {
                     debugLog('Initialisation de la page d\'index');
+                    debugLog(`Date et heure: ${new Date().toLocaleString()}`);
+                    debugLog(`Configuration: ${JSON.stringify(CONFIG, null, 2)}`);
                     
                     // Détecter si l'index est ouvert directement en local (file://)
                     if (window.location.protocol === 'file:') {
-                        throw new Error("L'utilisation locale avec le protocole file:// n'est pas prise en charge. Veuillez utiliser un serveur web ou GitHub Pages.");
+                        debugLog('Détection du protocole file:// - attention aux restrictions CORS');
                     }
                     
                     // Détecter automatiquement les configurations GitHub Pages
@@ -475,11 +640,24 @@
                         }
                     }
                     
+                    // Vérifier la connexion internet
+                    try {
+                        const testResponse = await fetch('https://api.github.com', { 
+                            method: 'HEAD',
+                            cache: 'no-store'
+                        });
+                        debugLog(`Test de connexion à GitHub: ${testResponse.status}`);
+                    } catch (e) {
+                        debugLog(`Erreur de connexion à GitHub: ${e.message}`);
+                    }
+                    
                     const fiches = await processFiches();
                     displayFiches(fiches);
                     
                 } catch (error) {
                     debugLog(`Erreur d'initialisation: ${error.message}`);
+                    debugLog(error.stack);
+                    
                     const container = document.getElementById('fiches-container');
                     container.innerHTML = `
                         <div class="error-message">
@@ -491,11 +669,18 @@
                                     <li>Vérifiez que votre dépôt est <strong>public</strong> (l'API GitHub ne fonctionne qu'avec des dépôts publics sans authentification)</li>
                                     <li>Vérifiez les paramètres de configuration du dépôt dans l'objet <code>CONFIG</code></li>
                                     <li>Assurez-vous que GitHub Pages est correctement configuré</li>
-                                    <li>Consultez la console développeur (F12) pour voir les messages d'erreur détaillés</li>
+                                    <li>Consultez les informations de débogage pour plus de détails</li>
                                 </ul>
                             </div>
                         </div>
                     `;
+                    
+                    // Afficher le bouton de débogage en cas d'erreur
+                    const toggleButton = document.getElementById('debug-toggle');
+                    if (toggleButton) {
+                        toggleButton.style.display = 'block';
+                        toggleButton.click(); // Ouvrir automatiquement les infos de débogage
+                    }
                 }
             }
             
