@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index des fiches de lecture</title>
+    <style>
+        :root {
+            --primary-color: #6a1b9a;
+            --secondary-color: #9c27b0;
+            --accent-color: #e1bee7;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #fff;
+            --border-radius: 12px;
+            --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .fiches-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .fiche-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .fiche-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .fiche-header {
+            padding: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .fiche-title {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .fiche-author {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+        
+        .fiche-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .fiche-description {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .fiche-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            align-self: flex-start;
+            transition: background-color 0.3s ease;
+        }
+        
+        .fiche-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .fiches-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation de chargement */
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(156, 39, 176, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--secondary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fiches de Lecture</h1>
+            <div class="subtitle">Oeuvres littéraires analysées</div>
+        </header>
+        
+        <div id="fiches-container" class="fiches-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Chargement des fiches de lecture...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction pour extraire le titre et l'auteur d'une fiche de lecture HTML
+            async function extractBookInfo(htmlContent, filename) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, 'text/html');
+                
+                let title = '';
+                let author = '';
+                let description = 'Fiche de lecture détaillée avec résumé, contexte, personnages et analyse.';
+                
+                // Tenter d'extraire le titre principal
+                const h1Element = doc.querySelector('h1');
+                if (h1Element) {
+                    title = h1Element.textContent.trim();
+                }
+                
+                // Tenter d'extraire l'auteur depuis la sous-titre
+                const subtitleElement = doc.querySelector('.subtitle');
+                if (subtitleElement) {
+                    const subtitleText = subtitleElement.textContent.trim();
+                    // Extraire l'auteur (généralement au format "de [Auteur] - Fiche de lecture")
+                    const authorMatch = subtitleText.match(/d[e']?\s+([\w\s]+)\s+-/i);
+                    if (authorMatch && authorMatch[1]) {
+                        author = authorMatch[1].trim();
+                    }
+                }
+                
+                // Tenter d'extraire une brève description du livre
+                const resumeSection = doc.querySelector('#resume');
+                if (resumeSection) {
+                    const highlightBox = resumeSection.querySelector('.highlight-box');
+                    if (highlightBox) {
+                        description = highlightBox.textContent.trim();
+                    } else {
+                        const firstParagraph = resumeSection.querySelector('p');
+                        if (firstParagraph) {
+                            description = firstParagraph.textContent.trim();
+                        }
+                    }
+                }
+                
+                return {
+                    title: title || filename.replace('.html', ''),
+                    author: author || 'Auteur inconnu',
+                    description: description,
+                    filename: filename
+                };
+            }
+            
+            // Fonction pour récupérer et scanner les fichiers HTML du répertoire
+            async function scanHtmlFiles() {
+                try {
+                    // Récupérer la liste des fichiers dans le répertoire actuel
+                    const response = await fetch('.');
+                    const html = await response.text();
+                    
+                    // Extraire les liens vers les fichiers HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Configuration pour différents serveurs
+                    // Apache/Nginx directoryListing
+                    let links = Array.from(doc.querySelectorAll('a[href]'));
+                    
+                    // Filtrer pour ne garder que les fichiers HTML
+                    links = links.filter(link => {
+                        const href = link.getAttribute('href');
+                        return href.endsWith('.html') && 
+                               href !== 'index.html' && 
+                               !href.includes('/') && 
+                               !href.startsWith('?') &&
+                               !href.startsWith('#');
+                    });
+                    
+                    // Si aucun lien HTML trouvé, tenter une méthode alternative
+                    if (links.length === 0) {
+                        // Essayer d'analyser différents formats de listing
+                        // Recherche de modèles dans le HTML brut
+                        const htmlFileRegex = /href="([^"]+\.html)"/g;
+                        let match;
+                        const htmlFiles = [];
+                        
+                        while ((match = htmlFileRegex.exec(html)) !== null) {
+                            const filename = match[1];
+                            if (filename !== 'index.html' && !filename.includes('/') && !filename.startsWith('?')) {
+                                htmlFiles.push(filename);
+                            }
+                        }
+                        
+                        // Créer des objets liens à partir des noms de fichiers trouvés
+                        links = htmlFiles.map(filename => {
+                            return { getAttribute: () => filename };
+                        });
+                    }
+                    
+                    const fichePromises = links.map(async (link) => {
+                        const filename = link.getAttribute('href');
+                        try {
+                            // Récupérer le contenu de chaque fichier HTML
+                            const response = await fetch(filename);
+                            const html = await response.text();
+                            
+                            // Extraire les informations du livre
+                            return await extractBookInfo(html, filename);
+                        } catch (error) {
+                            console.error(`Erreur lors du traitement de ${filename}:`, error);
+                            return {
+                                title: filename.replace('.html', ''),
+                                author: 'Information non disponible',
+                                description: 'Impossible de charger les détails de cette fiche.',
+                                filename: filename
+                            };
+                        }
+                    });
+                    
+                    return await Promise.all(fichePromises);
+                    
+                } catch (error) {
+                    console.error('Erreur lors du scan des fichiers HTML:', error);
+                    throw error;
+                }
+            }
+            
+            // Fonction pour afficher les fiches de lecture
+            function displayFiches(fiches) {
+                const container = document.getElementById('fiches-container');
+                container.innerHTML = ''; // Effacer le message de chargement
+                
+                if (fiches.length === 0) {
+                    container.innerHTML = `
+                        <div class="error-message">
+                            <h3>Aucune fiche de lecture trouvée</h3>
+                            <p>Veuillez ajouter des fiches de lecture HTML dans ce répertoire.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Trier les fiches par ordre alphabétique du titre
+                fiches.sort((a, b) => a.title.localeCompare(b.title, 'fr'));
+                
+                // Créer une carte pour chaque fiche
+                fiches.forEach(fiche => {
+                    const ficheElement = document.createElement('div');
+                    ficheElement.className = 'fiche-card';
+                    
+                    ficheElement.innerHTML = `
+                        <div class="fiche-header">
+                            <h2 class="fiche-title">${fiche.title}</h2>
+                            <div class="fiche-author">${fiche.author}</div>
+                        </div>
+                        <div class="fiche-content">
+                            <p class="fiche-description">${fiche.description}</p>
+                            <a href="${fiche.filename}" class="fiche-link">Consulter la fiche</a>
+                        </div>
+                    `;
+                    
+                    container.appendChild(ficheElement);
+                });
+            }
+            
+            // Fonction principale pour initialiser la page
+            async function init() {
+                try {
+                    const fiches = await scanHtmlFiles();
+                    displayFiches(fiches);
+                } catch (error) {
+                    console.error('Erreur d\'initialisation:', error);
+                    const container = document.getElementById('fiches-container');
+                    container.innerHTML = `
+                        <div class="error-message">
+                            <h3>Erreur lors du chargement des fiches</h3>
+                            <p>Impossible de récupérer la liste des fiches de lecture. ${error.message}</p>
+                            <p>Si vous exécutez ce fichier localement, veuillez l'ouvrir via un serveur web.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Méthode alternative si la précédente échoue
+            function fallbackMethod() {
+                // Liste des noms de fichiers connus (méthode statique de secours)
+                // À modifier manuellement si nécessaire, mais cette solution n'est qu'un dernier recours
+                const knownHtmlFiles = [
+                    'cannibale.html',
+                    'femme-gelee.html'
+                    // Ajoutez d'autres fiches connues ici
+                ];
+                
+                Promise.all(knownHtmlFiles.map(async (filename) => {
+                    try {
+                        const response = await fetch(filename);
+                        const html = await response.text();
+                        return await extractBookInfo(html, filename);
+                    } catch (error) {
+                        console.error(`Erreur lors du traitement de ${filename}:`, error);
+                        return {
+                            title: filename.replace('.html', ''),
+                            author: 'Information non disponible',
+                            description: 'Impossible de charger les détails de cette fiche.',
+                            filename: filename
+                        };
+                    }
+                }))
+                .then(fiches => {
+                    displayFiches(fiches);
+                })
+                .catch(error => {
+                    console.error('Erreur avec la méthode de secours:', error);
+                    const container = document.getElementById('fiches-container');
+                    container.innerHTML = `
+                        <div class="error-message">
+                            <h3>Toutes les méthodes de chargement ont échoué</h3>
+                            <p>Veuillez vérifier la configuration de votre serveur web.</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Lancer l'initialisation avec délai pour permettre à la page de s'afficher
+            setTimeout(() => {
+                init().catch(() => {
+                    console.log("Méthode principale échouée, essai de la méthode de secours");
+                    fallbackMethod();
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
