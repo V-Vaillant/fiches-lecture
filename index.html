@@ -189,28 +189,40 @@
     </div>
 
     <script>
-        // Configuration des fiches de lecture
-        // ===================================
-        // Vous pouvez soit:
-        // 1. Laisser cette liste vide pour une détection automatique des fichiers (fonctionne sur la plupart des serveurs)
-        // 2. Ajouter manuellement les noms de vos fichiers HTML pour une détection garantie
-        const FICHES_DE_LECTURE = [
-            'femme-gelee.html',  // Exemple: La femme gelée
-            'cannibale.html',    // Exemple: Cannibale
-            // Ajoutez d'autres fiches ici au format 'nom-fichier.html',
-        ];
+        // CONFIGURATION - À PERSONNALISER
+        // ===============================
+        const CONFIG = {
+            // Votre nom d'utilisateur GitHub
+            owner: 'V-Vaillant',
+            
+            // Nom du dépôt GitHub où sont stockées vos fiches
+            repo: 'fiches-lectures',
+            
+            // Branche (généralement 'main' ou 'master')
+            branch: 'main',
+            
+            // Dossier où se trouvent vos fiches (laisser vide '' si à la racine)
+            path: '',
+            
+            // Extensions des fichiers à considérer comme des fiches
+            extensions: ['.html'],
+            
+            // Fichiers à exclure (comme ce fichier index)
+            excludeFiles: ['index.html', 'README.html', '404.html'],
+            
+            // Activer les logs de débogage (true/false)
+            debug: true
+        };
         
-        // Code principal - ne pas modifier sauf si vous savez ce que vous faites
+        // CODE PRINCIPAL - NE PAS MODIFIER
         document.addEventListener('DOMContentLoaded', function() {
-            const DEBUG = true; // Mettre à true pour voir les messages de débogage dans la console
+            const DEBUG = CONFIG.debug;
             
             function debugLog(...args) {
-                if (DEBUG) {
-                    console.log('[Index Fiches]', ...args);
-                }
+                if (DEBUG) console.log('[Index Fiches]', ...args);
             }
             
-            // Fonction pour extraire le titre et l'auteur d'une fiche de lecture HTML
+            // Extraction des informations d'une fiche HTML
             async function extractBookInfo(htmlContent, filename) {
                 debugLog(`Extraction des infos depuis ${filename}`);
                 const parser = new DOMParser();
@@ -277,131 +289,130 @@
                 };
             }
             
-            // Fonction pour récupérer et scanner les fichiers HTML du répertoire
-            async function scanHtmlFiles() {
-                // 1. Si la liste manuelle est remplie, l'utiliser directement
-                if (FICHES_DE_LECTURE.length > 0) {
-                    debugLog(`Utilisation de la liste manuelle de ${FICHES_DE_LECTURE.length} fiches`);
-                    return processFileList(FICHES_DE_LECTURE);
+            // Récupérer la liste des fichiers HTML depuis l'API GitHub
+            async function fetchRepositoryFiles() {
+                debugLog('Récupération des fichiers depuis l\'API GitHub');
+                
+                // Vérifier si les paramètres GitHub sont configurés
+                if (!CONFIG.owner || !CONFIG.repo) {
+                    throw new Error("Configuration GitHub incomplète. Veuillez renseigner votre nom d'utilisateur et le nom du dépôt.");
                 }
                 
-                // 2. Sinon, tenter la détection automatique
-                debugLog(`Tentative de détection automatique des fichiers HTML`);
                 try {
-                    // Récupérer la liste des fichiers dans le répertoire actuel
-                    const response = await fetch('.');
-                    const html = await response.text();
-                    debugLog(`Contenu du répertoire récupéré (${html.length} caractères)`);
+                    // Construire l'URL de l'API GitHub pour lister les fichiers
+                    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?ref=${CONFIG.branch}`;
+                    debugLog(`URL de l'API GitHub: ${apiUrl}`);
                     
-                    // Rechercher tous les liens vers des fichiers HTML
-                    const htmlFileRegex = /href="([^"]+\.html)"/g;
-                    let match;
-                    const htmlFiles = [];
+                    const response = await fetch(apiUrl);
                     
-                    while ((match = htmlFileRegex.exec(html)) !== null) {
-                        const filename = match[1];
-                        if (filename !== 'index.html' && !filename.includes('/') && 
-                            !filename.startsWith('?') && !filename.startsWith('#')) {
-                            htmlFiles.push(filename);
-                            debugLog(`Fichier HTML trouvé: ${filename}`);
-                        }
+                    if (!response.ok) {
+                        throw new Error(`Erreur API GitHub (${response.status}): ${await response.text()}`);
                     }
                     
-                    if (htmlFiles.length > 0) {
-                        debugLog(`${htmlFiles.length} fichiers HTML trouvés automatiquement`);
-                        return processFileList(htmlFiles);
-                    }
+                    const files = await response.json();
+                    debugLog(`${files.length} fichiers trouvés dans le dépôt`);
                     
-                    // Si aucun fichier trouvé, essayer une autre méthode
-                    debugLog(`Aucun fichier trouvé avec la méthode regex. Tentative avec DOM`);
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
+                    // Filtrer pour ne garder que les fichiers HTML
+                    const htmlFiles = files.filter(file => {
+                        // S'assurer que c'est un fichier et pas un dossier
+                        if (file.type !== 'file') return false;
+                        
+                        // Vérifier l'extension
+                        const hasValidExtension = CONFIG.extensions.some(ext => 
+                            file.name.toLowerCase().endsWith(ext.toLowerCase())
+                        );
+                        
+                        // Vérifier si le fichier est à exclure
+                        const isExcluded = CONFIG.excludeFiles.some(excluded => 
+                            file.name.toLowerCase() === excluded.toLowerCase()
+                        );
+                        
+                        return hasValidExtension && !isExcluded;
+                    });
                     
-                    let links = Array.from(doc.querySelectorAll('a[href]'))
-                        .filter(link => {
-                            const href = link.getAttribute('href');
-                            return href.endsWith('.html') && 
-                                  href !== 'index.html' && 
-                                  !href.includes('/') && 
-                                  !href.startsWith('?') &&
-                                  !href.startsWith('#');
-                        })
-                        .map(link => link.getAttribute('href'));
-                    
-                    if (links.length > 0) {
-                        debugLog(`${links.length} fichiers HTML trouvés avec la méthode DOM`);
-                        return processFileList(links);
-                    }
-                    
-                    // Si toujours rien, utiliser une liste de noms courants pour tester
-                    debugLog(`Aucun fichier trouvé. Tentative avec des noms courants`);
-                    const commonNames = [
-                        'femme-gelee.html', 'la-femme-gelee.html', 
-                        'cannibale.html', 
-                        'etranger.html', 'l-etranger.html',
-                        'candide.html', 
-                        'germinal.html',
-                        'peste.html', 'la-peste.html',
-                        'madame-bovary.html'
-                    ];
-                    
-                    return processFileList(commonNames);
+                    debugLog(`${htmlFiles.length} fichiers HTML valides trouvés`);
+                    return htmlFiles;
                     
                 } catch (error) {
-                    debugLog(`Erreur lors de la détection automatique: ${error.message}`);
-                    throw new Error(`Impossible de détecter automatiquement les fiches. ${error.message}`);
+                    debugLog(`Erreur lors de la récupération depuis GitHub: ${error.message}`);
+                    throw error;
                 }
             }
             
-            // Traiter une liste de noms de fichiers et récupérer leurs infos
-            async function processFileList(fileList) {
-                debugLog(`Traitement de ${fileList.length} fichiers`);
-                
-                // Tester chaque fichier pour voir s'il existe et extraire ses informations
-                const fichePromises = fileList.map(async (filename) => {
-                    try {
-                        debugLog(`Tentative de récupération de ${filename}`);
-                        const response = await fetch(filename, { method: 'GET' });
-                        
-                        if (!response.ok) {
-                            debugLog(`Fichier ${filename} introuvable (${response.status})`);
+            // Récupérer le contenu de chaque fichier et extraire les informations
+            async function processFiches() {
+                try {
+                    // Récupérer la liste des fichiers
+                    const files = await fetchRepositoryFiles();
+                    
+                    if (files.length === 0) {
+                        debugLog('Aucun fichier HTML valide trouvé dans le dépôt');
+                        return [];
+                    }
+                    
+                    // Traiter chaque fichier
+                    const fichePromises = files.map(async (file) => {
+                        try {
+                            debugLog(`Traitement de ${file.name}`);
+                            
+                            // Utiliser l'URL raw de GitHub pour récupérer le contenu
+                            // Format: https://raw.githubusercontent.com/OWNER/REPO/BRANCH/PATH
+                            const rawUrl = file.download_url;
+                            debugLog(`URL du contenu brut: ${rawUrl}`);
+                            
+                            const response = await fetch(rawUrl, {
+                                method: 'GET',
+                                cache: 'no-store',
+                                headers: { 'Cache-Control': 'no-cache' }
+                            });
+                            
+                            if (!response.ok) {
+                                debugLog(`Erreur lors de la récupération de ${file.name}: ${response.status}`);
+                                return null;
+                            }
+                            
+                            const html = await response.text();
+                            debugLog(`Contenu de ${file.name} récupéré (${html.length} caractères)`);
+                            
+                            // Extraire les informations
+                            return await extractBookInfo(html, file.name);
+                            
+                        } catch (error) {
+                            debugLog(`Erreur lors du traitement de ${file.name}: ${error.message}`);
                             return null;
                         }
-                        
-                        const html = await response.text();
-                        debugLog(`Fichier ${filename} récupéré (${html.length} caractères)`);
-                        
-                        // Extraire les informations du livre
-                        return await extractBookInfo(html, filename);
-                    } catch (error) {
-                        debugLog(`Erreur lors du traitement de ${filename}: ${error.message}`);
-                        return null;
-                    }
-                });
-                
-                // Attendre toutes les promesses et filtrer les résultats nuls
-                const results = await Promise.all(fichePromises);
-                const validResults = results.filter(result => result !== null);
-                
-                debugLog(`${validResults.length} fiches valides trouvées sur ${fileList.length} testées`);
-                return validResults;
+                    });
+                    
+                    // Attendre que tous les traitements soient terminés
+                    const results = await Promise.all(fichePromises);
+                    
+                    // Filtrer les résultats null (erreurs)
+                    const validResults = results.filter(result => result !== null);
+                    debugLog(`${validResults.length} fiches valides traitées`);
+                    
+                    return validResults;
+                    
+                } catch (error) {
+                    debugLog(`Erreur générale: ${error.message}`);
+                    throw error;
+                }
             }
             
-            // Fonction pour afficher les fiches de lecture
+            // Afficher les fiches trouvées
             function displayFiches(fiches) {
                 const container = document.getElementById('fiches-container');
                 container.innerHTML = ''; // Effacer le message de chargement
                 
                 if (fiches.length === 0) {
-                    debugLog(`Aucune fiche à afficher`);
                     container.innerHTML = `
                         <div class="error-message">
                             <h3>Aucune fiche de lecture trouvée</h3>
-                            <p>Vous pouvez ajouter vos fiches de lecture en suivant ces étapes :</p>
+                            <p>Vérifiez les paramètres de configuration :</p>
                             <ol style="text-align: left; margin: 15px 20px;">
-                                <li>Placez vos fichiers HTML de fiches de lecture dans ce même dossier</li>
-                                <li>Si la détection automatique ne fonctionne pas, ouvrez ce fichier et ajoutez manuellement les noms des fichiers dans la variable <code>FICHES_DE_LECTURE</code> au début du script</li>
-                                <li>Assurez-vous que les fiches HTML ont la même structure avec un titre H1, une classe .subtitle et une section #resume</li>
+                                <li>Ouvrez ce fichier <code>index.html</code> et vérifiez les paramètres dans l'objet <code>CONFIG</code></li>
+                                <li>Assurez-vous que le nom d'utilisateur et le nom du dépôt sont corrects</li>
+                                <li>Vérifiez que vous avez bien des fichiers HTML dans votre dépôt</li>
+                                <li>Consultez la console (F12) pour plus de détails sur l'erreur</li>
                             </ol>
                         </div>
                     `;
@@ -430,29 +441,57 @@
                     container.appendChild(ficheElement);
                 });
                 
+                // Ajouter un message indiquant le nombre de fiches
+                const countElement = document.createElement('div');
+                countElement.style.textAlign = 'center';
+                countElement.style.margin = '20px 0';
+                countElement.style.color = '#666';
+                countElement.innerHTML = `<p>${fiches.length} fiche${fiches.length > 1 ? 's' : ''} de lecture disponible${fiches.length > 1 ? 's' : ''}</p>`;
+                container.appendChild(countElement);
+                
                 debugLog(`${fiches.length} fiches affichées`);
             }
             
-            // Fonction principale pour initialiser la page
+            // Initialisation de la page
             async function init() {
                 try {
                     debugLog('Initialisation de la page d\'index');
-                    const fiches = await scanHtmlFiles();
+                    
+                    // Détecter si l'index est ouvert directement en local (file://)
+                    if (window.location.protocol === 'file:') {
+                        throw new Error("L'utilisation locale avec le protocole file:// n'est pas prise en charge. Veuillez utiliser un serveur web ou GitHub Pages.");
+                    }
+                    
+                    // Détecter automatiquement les configurations GitHub Pages
+                    if (!CONFIG.owner || !CONFIG.repo) {
+                        // Tenter de déduire le propriétaire et le dépôt à partir de l'URL
+                        const githubPagesPattern = /https?:\/\/([^.]+)\.github\.io\/([^\/]+)/;
+                        const match = window.location.href.match(githubPagesPattern);
+                        
+                        if (match) {
+                            CONFIG.owner = match[1];
+                            CONFIG.repo = match[2];
+                            debugLog(`Configuration GitHub Pages détectée automatiquement: ${CONFIG.owner}/${CONFIG.repo}`);
+                        }
+                    }
+                    
+                    const fiches = await processFiches();
                     displayFiches(fiches);
+                    
                 } catch (error) {
                     debugLog(`Erreur d'initialisation: ${error.message}`);
                     const container = document.getElementById('fiches-container');
                     container.innerHTML = `
                         <div class="error-message">
                             <h3>Erreur lors du chargement des fiches</h3>
-                            <p>Impossible de récupérer la liste des fiches de lecture : ${error.message}</p>
+                            <p>${error.message}</p>
                             <div style="margin-top: 15px; text-align: left;">
                                 <p><strong>Solutions possibles :</strong></p>
                                 <ul style="padding-left: 20px; margin-top: 10px;">
-                                    <li>Si vous exécutez ce fichier localement, ouvrez-le via un serveur web</li>
-                                    <li>Ajoutez manuellement les noms de fichiers dans la variable <code>FICHES_DE_LECTURE</code> au début du script</li>
-                                    <li>Vérifiez les permissions d'accès aux fichiers sur votre serveur</li>
-                                    <li>Ouvrez la console de développement (F12) pour voir les messages d'erreur détaillés</li>
+                                    <li>Vérifiez que votre dépôt est <strong>public</strong> (l'API GitHub ne fonctionne qu'avec des dépôts publics sans authentification)</li>
+                                    <li>Vérifiez les paramètres de configuration du dépôt dans l'objet <code>CONFIG</code></li>
+                                    <li>Assurez-vous que GitHub Pages est correctement configuré</li>
+                                    <li>Consultez la console développeur (F12) pour voir les messages d'erreur détaillés</li>
                                 </ul>
                             </div>
                         </div>
@@ -460,8 +499,8 @@
                 }
             }
             
-            // Lancer l'initialisation avec un délai pour permettre à la page de s'afficher
-            setTimeout(init, 500);
+            // Démarrer après un court délai
+            setTimeout(init, 300);
         });
     </script>
 </body>
