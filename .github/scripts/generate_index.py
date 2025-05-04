@@ -11,16 +11,16 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index des fiches de lecture</title>
     <style>
-        :root {
-            --primary-color: #6a1b9a;
-            --secondary-color: #9c27b0;
-            --accent-color: #e1bee7;
-            --background-color: #f8f9fa;
-            --text-color: #333;
-            --card-bg: #fff;
-            --border-radius: 12px;
-            --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-        }
+       :root {{
+    --primary-color: #6a1b9a;
+    --secondary-color: #9c27b0;
+    --accent-color: #e1bee7;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --card-bg: #fff;
+    --border-radius: 12px;
+    --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}}
         
         * {
             margin: 0;
