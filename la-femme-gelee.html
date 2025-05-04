@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La femme gelée - Fiche de lecture</title>
+    <style>
+        :root {
+            --primary-color: #9c27b0;
+            --secondary-color: #673ab7;
+            --accent-color: #3f51b5;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --section-bg: #fff;
+            --border-radius: 12px;
+            --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 15px;
+            font-size: 16px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 20px 0 15px 0;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 5px;
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 15px 0 10px 0;
+            font-size: 1.3rem;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background-color: var(--section-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .term {
+            background-color: #fff8dc;
+            border-left: 4px solid var(--accent-color);
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .term-header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-weight: bold;
+        }
+        
+        .term-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #fff8dc;
+        }
+        
+        .term.active .term-content {
+            max-height: 1000px;
+            padding: 15px;
+            transition: max-height 0.3s ease-in;
+        }
+        
+        .character {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .character h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .comparison {
+            background-color: #e1f5fe;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+        }
+        
+        .comparison h4 {
+            color: #0277bd;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .comparison-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .comparison-content {
+            display: none;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+        }
+        
+        .citation {
+            font-style: italic;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f3e5f5;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+        }
+        
+        .idea {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: var(--border-radius);
+        }
+        
+        .timeline {
+            background-color: #e3f2fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+        
+        .timeline-event {
+            margin-left: 30px;
+            padding: 10px;
+            position: relative;
+            border-left: 3px solid #2196f3;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-event:before {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background-color: #2196f3;
+            border-radius: 50%;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #0d47a1;
+            margin-bottom: 5px;
+        }
+        
+        .nav-menu {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 0;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            margin: 0 5px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .highlight-box {
+            background-color: #f3e5f5;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            color: #757575;
+            font-style: italic;
+        }
+        
+        .important-point {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .flashcard {
+            background-color: #e1f5fe;
+            padding: 0;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .flashcard-question {
+            background-color: #03a9f4;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .flashcard-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        
+        .flashcard.active .flashcard-answer {
+            padding: 15px;
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                font-size: 15px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .nav-menu {
+                padding: 8px 0;
+            }
+            
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>La femme gelée</h1>
+            <div class="subtitle">d'Annie Ernaux - Fiche de lecture</div>
+        </header>
+        
+        <div class="nav-menu">
+            <a href="#resume" class="nav-item">Résumé</a>
+            <a href="#contexte" class="nav-item">Contexte</a>
+            <a href="#vocabulaire" class="nav-item">Vocabulaire</a>
+            <a href="#personnages" class="nav-item">Personnages</a>
+            <a href="#comparaisons" class="nav-item">Comparaisons</a>
+            <a href="#idees" class="nav-item">Idées</a>
+            <a href="#debat" class="nav-item">Débat</a>
+            <a href="#quiz" class="nav-item">Quiz</a>
+        </div>
+        
+        <section id="resume" class="section">
+            <h2>C'est quoi ce livre, en bref ?</h2>
+            
+            <div class="highlight-box">
+                Un roman autobiographique (179 pages) qui raconte l'histoire d'une femme qui perd peu à peu sa liberté et ses aspirations en se conformant aux rôles traditionnels d'épouse et de mère dans la France des années 1950-1970.
+            </div>
+            
+            <p><em>La femme gelée</em> est l'histoire d'une narratrice (Annie Ernaux elle-même) qui grandit dans un milieu populaire, avec des parents cafetiers-épiciers en Normandie. Intelligente et curieuse, elle rêve d'indépendance et d'émancipation par les études.</p>
+            
+            <p>Elle réussit brillamment ses études et devient enseignante, mais après son mariage avec un homme de classe sociale supérieure, elle se retrouve progressivement piégée dans un rôle traditionnel de femme au foyer, malgré sa carrière.</p>
+            
+            <p>Peu à peu, elle ressent un profond décalage entre ses aspirations de liberté et la réalité quotidienne : tâches ménagères, soins aux enfants, responsabilités familiales qui reposent essentiellement sur elle tandis que son mari poursuit sa carrière sans contraintes.</p>
+            
+            <p>La narratrice décrit cette "congélation" progressive de son être, de ses désirs et de ses ambitions face aux inégalités de genre dans le couple et dans la société.</p>
+            
+            <div style="text-align: center; margin: 15px 0;">
+                <img src="annie-ernaux-nobel.jpg" alt="Annie Ernaux, Prix Nobel de littérature 2022" style="max-width: 100%; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Annie Ernaux, Prix Nobel de littérature 2022</p>
+            </div>
+        </section>
+        
+        <section id="contexte" class="section">
+            <h2>Le contexte historique</h2>
+            
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-date">1940-1950</div>
+                    <p>Enfance de la narratrice en Normandie dans l'après-guerre.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1950-1960</div>
+                    <p>Période des études, émancipation intellectuelle de la narratrice.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1960-1970</div>
+                    <p>Mariage, naissance des enfants et installation dans la vie de couple traditionnelle.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1968</div>
+                    <p>Mai 68 : révolte étudiante et mouvement social qui remet en question les valeurs traditionnelles.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1970s</div>
+                    <p>Montée du féminisme en France, début de la libération des femmes.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">1981</div>
+                    <p>Publication de "La femme gelée" par Annie Ernaux.</p>
+                </div>
+                
+                <div class="timeline-event">
+                    <div class="timeline-date">2022</div>
+                    <p>Annie Ernaux reçoit le Prix Nobel de littérature.</p>
+                </div>
+            </div>
+            
+            <h3>La condition féminine en France (1950-1970)</h3>
+            <p>L'histoire se déroule à une période charnière pour les droits des femmes en France. Après la Seconde Guerre mondiale, les femmes ont obtenu le droit de vote (1944), mais restent largement cantonnées aux rôles traditionnels d'épouse et de mère.</p>
+            
+            <p>Même si les femmes travaillent de plus en plus, elles restent responsables des tâches domestiques. Les mouvements féministes émergent, mais les mentalités évoluent lentement.</p>
+            
+            <div style="text-align: center; margin: 15px 0;">
+                <img src="affiche-feministe-1970.jpg" alt="Affiche féministe des années 1970" style="max-width: 100%; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Affiche féministe des années 1970 : "Le privé est politique"</p>
+            </div>
+        </section>
+        
+        <section id="vocabulaire" class="section">
+            <h2>Vocabulaire à connaître</h2>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Condition féminine</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Ensemble des droits, des devoirs et de la place accordés aux femmes dans une société donnée. Ce terme englobe la situation juridique, économique, politique et sociale des femmes.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Féminisme</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Mouvement qui milite pour l'égalité des droits entre les femmes et les hommes. Dans les années 1970, le MLF (Mouvement de Libération des Femmes) a joué un rôle important en France.</p>
+                    <div style="text-align: center; margin: 15px 0;">
+                        <img src="manifestation-mlf-1970.jpg" alt="Manifestation du MLF dans les années 1970" style="max-width: 100%; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                        <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Manifestation du MLF dans les années 1970</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Double journée</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Phénomène touchant les femmes qui travaillent à l'extérieur et qui doivent également s'occuper des tâches domestiques et familiales à la maison. C'est un des thèmes centraux du livre.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Patriarcat</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Système social où les hommes détiennent le pouvoir dans la famille et la société. Dans ce système, les rôles sociaux sont strictement répartis selon le genre.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Métaphore de la "femme gelée"</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Image utilisée par Annie Ernaux pour décrire la perte progressive d'identité et de vitalité d'une femme qui se conforme aux attentes sociales. Ce "gel" représente la perte des aspirations, des désirs personnels et de la liberté.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Autofiction</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Genre littéraire qui mélange autobiographie et fiction. Annie Ernaux est connue pour son "écriture plate", un style direct et sans ornements qui cherche à restituer la vérité de l'expérience vécue.</p>
+                </div>
+            </div>
+            
+            <div class="term">
+                <div class="term-header">
+                    <strong>Déterminisme social</strong>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="term-content">
+                    <p>Théorie selon laquelle les comportements et choix individuels sont largement influencés par l'environnement social. Dans l'œuvre d'Ernaux, ce concept est central pour comprendre comment les femmes sont conditionnées à adopter certains rôles.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="personnages" class="section">
+            <h2>Les personnages principaux</h2>
+            
+            <div class="character">
+                <h4>La narratrice</h4>
+                <p>Personnage principal inspiré d'Annie Ernaux elle-même. Jeune femme issue d'un milieu modeste qui rêve d'émancipation par les études. Elle devient enseignante mais se retrouve progressivement enfermée dans un rôle traditionnel après son mariage.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Le mari</h4>
+                <p>Homme issu d'un milieu bourgeois, intellectuel. Il représente un mode de vie plus aisé, mais aussi les inégalités persistantes dans le couple. Bien qu'il partage certaines idées progressistes, il perpétue dans la pratique une organisation traditionnelle du foyer.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Les parents de la narratrice</h4>
+                <p>Cafetiers-épiciers en Normandie, ils représentent le milieu populaire d'où vient la narratrice. Sa mère, travailleuse et forte, lui transmet des valeurs d'indépendance, tout en étant elle-même soumise à une répartition traditionnelle des rôles.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Les enfants</h4>
+                <p>Ils ne sont pas individualisés mais représentent la charge maternelle qui pèse presque exclusivement sur la narratrice et contribue à son sentiment d'enfermement.</p>
+            </div>
+            
+            <div class="character">
+                <h4>Les autres femmes</h4>
+                <p>Amies, collègues, femmes croisées dans la vie quotidienne. Elles permettent à la narratrice de comparer son expérience et de prendre conscience que son malaise est partagé par beaucoup de femmes de sa génération.</p>
+            </div>
+        </section>
+        
+        <section id="comparaisons" class="section">
+            <h2>La condition féminine : hier et aujourd'hui</h2>
+            
+            <div class="comparison">
+                <h4>1. L'accès à l'éducation et au travail</h4>
+                <p>Dans le roman, la narratrice se bat pour faire des études supérieures et devenir enseignante, ce qui était moins courant pour les femmes à l'époque.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Aujourd'hui, les filles réussissent mieux que les garçons dans le système scolaire. Cependant, des inégalités persistent dans l'orientation professionnelle et les femmes sont toujours moins nombreuses dans certains domaines comme l'ingénierie ou la tech. Le film "Les figures de l'ombre" (Hidden Figures) illustre bien ce combat pour l'accès des femmes à certaines professions.</p>
+                    <div style="text-align: center; margin: 15px 0;">
+                        <img src="affiche-figures-ombre.jpg" alt="Affiche du film Les Figures de l'ombre" style="max-width: 100%; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                        <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Affiche du film "Les Figures de l'ombre" qui raconte l'histoire de femmes scientifiques afro-américaines à la NASA</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>2. La répartition des tâches domestiques</h4>
+                <p>Dans "La femme gelée", la narratrice assume presque seule les tâches ménagères et les soins aux enfants, malgré son travail d'enseignante.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Aujourd'hui, les hommes participent davantage aux tâches domestiques, mais les études montrent que les femmes y consacrent encore en moyenne 1h30 de plus par jour. La série "Maid" sur Netflix illustre bien la charge mentale et physique que représente le travail domestique.</p>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>3. Les attentes sociales et la pression de la perfection</h4>
+                <p>La narratrice ressent fortement la pression d'être à la fois une bonne mère, une bonne épouse et une bonne professionnelle.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>Dans notre société actuelle des réseaux sociaux, cette pression s'est intensifiée avec l'idéal de la "mère parfaite" véhiculé sur Instagram ou Pinterest. Le film "Bad Moms" traite avec humour de cette pression sociale et des attentes démesurées envers les mères.</p>
+                    <div style="text-align: center; margin: 15px 0;">
+                        <img src="maternite-reseaux-sociaux.jpg" alt="Images de mères parfaites sur les réseaux sociaux" style="max-width: 100%; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                        <p style="font-size: 0.8rem; font-style: italic; margin-top: 5px;">Représentation idéalisée de la maternité sur les réseaux sociaux</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <h4>4. L'autonomie financière</h4>
+                <p>Dans le roman, la narratrice constate que malgré son salaire d'enseignante, son travail est considéré comme secondaire par rapport à celui de son mari dans leur organisation familiale.</p>
+                <button class="comparison-button">Voir la comparaison moderne</button>
+                <div class="comparison-content">
+                    <p>La question de l'autonomie financière a évolué, avec une diversité de modèles familiaux et professionnels. Les écarts de rémunération existent mais varient considérablement selon les secteurs, l'expérience et les choix professionnels. Le jeu vidéo "Life is Strange: True Colors" explore de façon nuancée les questions d'indépendance financière et de choix de vie pour son héroïne.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="idees" class="section">
+            <h2>Les idées principales à retenir</h2>
+            
+            <div class="idea">
+                <h3>L'émancipation par l'éducation</h3>
+                <p>Le livre montre comment l'accès aux études supérieures est une voie cruciale pour l'émancipation des femmes, même si cela ne suffit pas à garantir une véritable égalité.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La persistance des inégalités dans le couple</h3>
+                <p>Malgré les avancées sociales et professionnelles des femmes, les rôles traditionnels persistent dans la sphère privée, créant un décalage entre aspirations et réalité quotidienne.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>Le poids des conditionnements sociaux</h3>
+                <p>Annie Ernaux montre comment les femmes sont conditionnées dès l'enfance à adopter certains comportements et à accepter certaines inégalités comme naturelles.</p>
+            </div>
+            
+            <div class="idea">
+                <h3>La perte d'identité dans le mariage traditionnel</h3>
+                <p>Le livre explore la façon dont une femme peut perdre progressivement son identité propre et ses aspirations en se conformant aux rôles attendus d'épouse et de mère.</p>
+            </div>
+            
+            <div class="citation">
+                <p>"Je ne sais pas quand elle s'est glissée en moi, la femme gelée. Celle qui pendant des années, existera entre mon corps et moi."</p>
+                <p>Cette phrase illustre le sentiment d'aliénation que ressent la narratrice, comme si sa véritable personnalité était emprisonnée dans la glace, figée et incapable de s'exprimer.</p>
+            </div>
+        </section>
+        
+        <section id="quiz" class="section">
+            <h2>Quiz interactif</h2>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">En quelle année a été publié "La femme gelée" ?</div>
+                <div class="flashcard-answer">En 1981. Annie Ernaux a écrit ce livre après plusieurs autres œuvres autobiographiques comme "Les Armoires vides" (1974) et "Ce qu'ils disent ou rien" (1977).</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Que symbolise la métaphore de la "femme gelée" ?</div>
+                <div class="flashcard-answer">La "femme gelée" symbolise l'engourdissement progressif des désirs, des aspirations et de la personnalité d'une femme qui se conforme aux rôles sociaux traditionnels. C'est une forme d'aliénation où l'on devient étranger à soi-même.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Quel est le milieu social d'origine de la narratrice ?</div>
+                <div class="flashcard-answer">La narratrice est issue d'un milieu populaire. Ses parents sont cafetiers-épiciers en Normandie, ce qui crée un contraste avec le milieu plus bourgeois de son mari.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Quelle est la profession de la narratrice ?</div>
+                <div class="flashcard-answer">La narratrice est enseignante. Cette profession, bien que lui donnant une indépendance financière, ne la libère pas des attentes sociales concernant son rôle d'épouse et de mère.</div>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Quel prix Annie Ernaux a-t-elle reçu en 2022 ?</div>
+                <div class="flashcard-answer">Annie Ernaux a reçu le Prix Nobel de littérature en 2022 pour "le courage et l'acuité clinique avec lesquels elle découvre les racines, les éloignements et les contraintes collectives de la mémoire personnelle".</div>
+            </div>
+        </section>
+        
+        <section id="debat" class="section">
+            <h2>Pour débattre : L'évolution des rôles sociaux</h2>
+            
+            <div class="highlight-box">
+                40 ans après la publication de "La femme gelée", comment les rôles sociaux et les attentes liées au genre ont-ils évolué dans la société française ?
+            </div>
+            
+            <h3>Les avancées et les obstacles persistants</h3>
+            
+            <div class="comparison">
+                <h4>Ce qui a changé depuis les années 1970</h4>
+                <p>La situation des femmes a considérablement évolué depuis l'époque décrite dans "La femme gelée".</p>
+                <button class="comparison-button">Voir les deux côtés</button>
+                <div class="comparison-content">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        <div style="flex: 1; min-width: 250px; background-color: #e8f5e9; padding: 10px; border-radius: 8px;">
+                            <h5 style="color: #2e7d32;">Les progrès réalisés :</h5>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Lois sur l'égalité professionnelle</li>
+                                <li>Contraception et IVG légalisées</li>
+                                <li>Meilleure représentation politique</li>
+                                <li>Criminalisation des violences conjugales</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; min-width: 250px; background-color: #ffebee; padding: 10px; border-radius: 8px;">
+                            <h5 style="color: #c62828;">Des différences qui persistent :</h5>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Écarts de rémunération (variables selon secteurs)</li>
+                                <li>Répartition des tâches domestiques</li>
+                                <li>Différences de représentation aux postes de direction</li>
+                                <li>Questions de sécurité personnelle</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Les nouvelles formes d'inégalités</h3>
+            
+            <div style="background-color: #f5f5f5; padding: 15px; border-radius: 12px; margin: 20px 0; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+                <h4 style="text-align: center; margin-bottom: 15px; color: #333;">De la "femme gelée" à la "femme épuisée" ?</h4>
+                
+                <div style="display: flex; flex-direction: column; max-width: 600px; margin: 0 auto;">
+                    <!-- Titre central -->
+                    <div style="background-color: #9c27b0; color: white; padding: 10px; text-align: center; border-radius: 8px; margin-bottom: 10px; font-weight: bold;">
+                        L'évolution de la condition féminine
+                    </div>
+                    
+                    <!-- Flèches divergentes -->
+                    <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                        <div style="width: 45%; height: 30px; position: relative;">
+                            <div style="position: absolute; width: 100%; height: 2px; background-color: #2e7d32; top: 15px;"></div>
+                            <div style="position: absolute; right: 0; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 15px solid #2e7d32; top: 5px;"></div>
+                        </div>
+                        <div style="width: 10%"></div>
+                        <div style="width: 45%; height: 30px; position: relative;">
+                            <div style="position: absolute; width: 100%; height: 2px; background-color: #c62828; top: 15px;"></div>
+                            <div style="position: absolute; left: 0; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 15px solid #c62828; top: 5px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Boîtes avec les deux perspectives -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <div style="width: 48%; background-color: #e8f5e9; padding: 10px; border-radius: 8px; border-top: 5px solid #2e7d32;">
+                            <h5 style="color: #2e7d32; text-align: center; margin-bottom: 8px;">Années 1970</h5>
+                            <ul style="list-style-type: none; padding-left: 5px; font-size: 0.9rem;">
+                                <li>✗ Différences juridiques formelles</li>
+                                <li>✗ Rôles sociaux plus rigides</li>
+                                <li>✗ Accès limité à certaines carrières</li>
+                                <li>✗ Moins d'autonomie financière</li>
+                            </ul>
+                        </div>
+                        <div style="width: 48%; background-color: #e1f5fe; padding: 10px; border-radius: 8px; border-top: 5px solid #0277bd;">
+                            <h5 style="color: #0277bd; text-align: center; margin-bottom: 8px;">Aujourd'hui</h5>
+                            <ul style="list-style-type: none; padding-left: 5px; font-size: 0.9rem;">
+                                <li>✓ Égalité juridique formelle</li>
+                                <li>✓ Plus grande flexibilité des rôles</li>
+                                <li>✓ Diversification des parcours</li>
+                                <li>✗ Certaines différences persistantes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Les enjeux contemporains -->
+                    <div style="background-color: #fff3e0; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                        <h5 style="color: #e65100; text-align: center; margin-bottom: 8px;">Les enjeux contemporains</h5>
+                        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Organisation familiale</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 50%, #c62828 50%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">En évolution</div>
+                            </div>
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Attentes sociales</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 50%, #c62828 50%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">Variables selon les genres</div>
+                            </div>
+                            <div style="width: 30%; min-width: 150px; text-align: center; padding: 5px;">
+                                <div style="font-weight: bold; margin-bottom: 5px;">Équilibre vie pro/perso</div>
+                                <div style="height: 10px; background: linear-gradient(to right, #2e7d32 50%, #c62828 50%); border-radius: 5px; margin-bottom: 5px;"></div>
+                                <div style="font-size: 0.8rem;">Défi pour tous</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conclusion -->
+                    <div style="background-color: #f3e5f5; padding: 10px; border-radius: 8px; border-left: 5px solid #9c27b0;">
+                        <p style="text-align: center; font-weight: bold; margin: 0;">
+                            Des transformations profondes des rôles sociaux depuis l'époque du roman
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="idea">
+                <p><span class="important-point">Les attentes sociales contemporaines :</span> Dans la société actuelle, tous les individus font face à diverses attentes sociales, bien que leur nature puisse varier selon le genre :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                    <li>Concilier carrière et vie personnelle</li>
+                    <li>Répondre aux attentes familiales</li>
+                    <li>Gérer la pression esthétique et d'apparence</li>
+                    <li>S'épanouir personnellement tout en répondant aux exigences professionnelles</li>
+                </ul>
+            </div>
+            
+            <div class="idea">
+                <p><span class="important-point">Les évolutions sociétales :</span> Notre société a connu de profondes transformations depuis l'époque du roman :</p>
+                <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                    <li>Nouveaux modes de communication et d'interaction sociale</li>
+                    <li>Évolution des représentations médiatiques des genres</li>
+                    <li>Influence des réseaux sociaux sur les standards personnels</li>
+                    <li>Préoccupation croissante pour l'équilibre vie professionnelle/vie personnelle</li>
+                </ul>
+            </div>
+            
+            <div class="flashcard">
+                <div class="flashcard-question">Quelle est la position d'Annie Ernaux aujourd'hui ?</div>
+                <div class="flashcard-answer">
+                    <p>Annie Ernaux, Prix Nobel de littérature 2022, reste une voix importante dans le paysage littéraire. Elle considère que l'écriture peut jouer un rôle essentiel dans la prise de conscience des enjeux sociaux.</p>
+                    <p>Dans ses œuvres récentes et ses interventions publiques, elle aborde notamment :</p>
+                    <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                        <li>L'importance de l'écriture comme outil de compréhension et d'expression</li>
+                        <li>La classe sociale comme facteur déterminant dans les parcours individuels</li>
+                        <li>Les attentes sociales et leurs influences sur les trajectoires personnelles</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="citation">
+                <p>"Écrire, c'est d'abord casser les images qui nous enferment."</p>
+                <p>Cette citation d'Annie Ernaux souligne le pouvoir libérateur de l'écriture et de la prise de conscience face aux conditionnements sociaux.</p>
+            </div>
+            
+            <div class="idea">
+                <p>"La femme gelée" reste un témoignage important d'une époque et permet de mesurer l'évolution des rôles sociaux, des attentes et des contraintes qui pèsent sur les individus dans notre société. La métaphore du "gel" invite à réfléchir aux différentes formes que peuvent prendre les limitations des choix personnels pour chacun.</p>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Conclusion</h2>
+            <p><em>La femme gelée</em> d'Annie Ernaux est un témoignage puissant sur la condition féminine dans la France des années 1950-1970. À travers son récit autobiographique, l'autrice décrit le processus d'aliénation progressive d'une femme qui, malgré son éducation et sa carrière, se retrouve enfermée dans des rôles traditionnels.</p>
+            
+            <p>Ce livre explore les thèmes de l'émancipation par l'éducation, des inégalités persistantes dans le couple, du poids des conditionnements sociaux et de la perte d'identité. Par son écriture directe et sans artifices, Annie Ernaux donne une voix à l'expérience de nombreuses femmes de sa génération.</p>
+            
+            <p>Quarante ans après sa publication, "La femme gelée" offre une perspective historique précieuse sur l'évolution de la société française et nous invite à réfléchir sur les transformations des rôles sociaux, des attentes et des choix personnels disponibles pour chacun, indépendamment de son genre.</p>
+        </section>
+    </div>
+
+    <script>
+        // Toggle vocabulary terms
+        document.querySelectorAll('.term-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const term = this.parentElement;
+                term.classList.toggle('active');
+                const toggle = this.querySelector('.toggle');
+                toggle.textContent = term.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+        
+        // Toggle comparisons
+        document.querySelectorAll('.comparison-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    this.textContent = 'Voir la comparaison moderne';
+                } else {
+                    content.style.display = 'block';
+                    this.textContent = 'Masquer la comparaison';
+                }
+            });
+        });
+        
+        // Toggle flashcards
+        document.querySelectorAll('.flashcard-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const flashcard = this.parentElement;
+                flashcard.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Auto-open first term and flashcard for demonstration
+        setTimeout(() => {
+            document.querySelector('.term').classList.add('active');
+            document.querySelector('.term .toggle').textContent = '▲';
+            document.querySelector('.flashcard').classList.add('active');
+        }, 500);
+    </script>
+</body>
+</html>
