@@ -5,194 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index des fiches de lecture</title>
     <style>
-        :root {
-            --primary-color: #6a1b9a;
-            --secondary-color: #9c27b0;
-            --accent-color: #e1bee7;
-            --background-color: #f8f9fa;
-            --text-color: #333;
-            --card-bg: #fff;
-            --border-radius: 12px;
-            --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.5;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .fiches-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        
-        .fiche-card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .fiche-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .fiche-header {
-            padding: 15px;
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .fiche-title {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-        }
-        
-        .fiche-author {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-style: italic;
-        }
-        
-        .fiche-content {
-            padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .fiche-description {
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-        
-        .fiche-link {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            align-self: flex-start;
-            transition: background-color 0.3s ease;
-        }
-        
-        .fiche-link:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 1.2rem;
-            color: var(--secondary-color);
-        }
-        
-        .error-message {
-            text-align: center;
-            padding: 20px;
-            background-color: #ffebee;
-            color: #c62828;
-            border-radius: var(--border-radius);
-            margin: 20px 0;
-        }
-        
-        .debug-info {
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-            display: none; /* Caché par défaut */
-        }
-        
-        .debug-toggle {
-            background-color: #eee;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-top: 10px;
-        }
-        
-        @media (max-width: 768px) {
-            .fiches-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 20px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-        }
 
-        /* Animation de chargement */
-        .spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(156, 39, 176, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--secondary-color);
-            animation: spin 1s ease-in-out infinite;
-            margin: 0 auto 20px auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+:root {
+    --primary-color: #6a1b9a;
+    --secondary-color: #9c27b0;
+    --accent-color: #e1bee7;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --card-bg: #fff;
+    --border-radius: 12px;
+    --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.fiches-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.fiche-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fiche-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.fiche-header {
+    padding: 15px;
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.fiche-title {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.fiche-author {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+.fiche-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fiche-description {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.fiche-link {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+}
+
+.fiche-link:hover {
+    background-color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .fiches-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -201,492 +149,57 @@
             <h1>Fiches de Lecture</h1>
             <div class="subtitle">Oeuvres littéraires analysées</div>
         </header>
-        
-        <div id="fiches-container" class="fiches-container">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Chargement des fiches de lecture...</p>
-            </div>
-        </div>
-        
-        <div id="debug-info" class="debug-info"></div>
-        <button id="debug-toggle" class="debug-toggle" style="display: none;">Afficher les infos de débogage</button>
-    </div>
+        <div class="fiches-container">
 
-    <script>
-        // CONFIGURATION - À PERSONNALISER
-        // ===============================
-        const CONFIG = {
-            // Votre nom d'utilisateur GitHub
-            owner: 'V-Vaillant',
-            
-            // Nom du dépôt GitHub où sont stockées vos fiches
-            repo: 'fiches-lecture',
-            
-            // Branche (généralement 'main' ou 'master')
-            branch: 'main',
-            
-            // Dossier où se trouvent vos fiches (laisser vide '' si à la racine)
-            path: '',
-            
-            // Extensions des fichiers à considérer comme des fiches
-            extensions: ['.html'],
-            
-            // Fichiers à exclure (comme ce fichier index)
-            excludeFiles: ['index.html', 'README.html', '404.html'],
-            
-            // Activer les logs de débogage (true/false)
-            debug: true,
-            
-            // Afficher les informations de débogage dans la page (true/false)
-            debugInPage: true
-        };
-        
-        // CODE PRINCIPAL - MODIFIÉ POUR PLUS DE ROBUSTESSE
-        document.addEventListener('DOMContentLoaded', function() {
-            const DEBUG = CONFIG.debug;
-            const debugInfo = [];
-            
-            function debugLog(...args) {
-                const message = args.map(arg => 
-                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                ).join(' ');
-                
-                if (DEBUG) {
-                    console.log('[Index Fiches]', ...args);
-                    
-                    // Stocker pour l'affichage en page si activé
-                    if (CONFIG.debugInPage) {
-                        debugInfo.push(message);
-                        updateDebugDisplay();
-                    }
-                }
-            }
-            
-            function updateDebugDisplay() {
-                const debugElement = document.getElementById('debug-info');
-                if (debugElement) {
-                    debugElement.textContent = debugInfo.join('\n');
-                }
-                
-                // Afficher le bouton de toggle
-                const toggleButton = document.getElementById('debug-toggle');
-                if (toggleButton && debugInfo.length > 0) {
-                    toggleButton.style.display = 'block';
-                }
-            }
-            
-            // Toggle pour afficher/masquer les infos de débogage
-            const toggleButton = document.getElementById('debug-toggle');
-            const debugElement = document.getElementById('debug-info');
-            
-            if (toggleButton && debugElement) {
-                toggleButton.addEventListener('click', function() {
-                    const isVisible = debugElement.style.display === 'block';
-                    debugElement.style.display = isVisible ? 'none' : 'block';
-                    toggleButton.textContent = isVisible 
-                        ? 'Afficher les infos de débogage' 
-                        : 'Masquer les infos de débogage';
-                });
-            }
-            
-            // Extraction des informations d'une fiche HTML - Version améliorée
-            async function extractBookInfo(htmlContent, filename) {
-                debugLog(`Extraction des infos depuis ${filename}`);
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlContent, 'text/html');
-                
-                // Extraction du titre - Améliorée
-                let title = '';
-                const h1Element = doc.querySelector('h1');
-                if (h1Element) {
-                    title = h1Element.textContent.trim();
-                    debugLog(`Titre trouvé via h1: "${title}"`);
-                } else {
-                    // Chercher d'autres éléments qui pourraient contenir le titre
-                    const titleElement = doc.querySelector('title') || 
-                                      doc.querySelector('h2') ||
-                                      doc.querySelector('header strong');
-                    if (titleElement) {
-                        title = titleElement.textContent.trim();
-                        debugLog(`Titre trouvé via élément alternatif: "${title}"`);
-                    }
-                }
-                
-                // Extraction de l'auteur - Améliorée
-                let author = '';
-                const subtitleElement = doc.querySelector('.subtitle');
-                if (subtitleElement) {
-                    const subtitleText = subtitleElement.textContent.trim();
-                    debugLog(`Sous-titre trouvé: "${subtitleText}"`);
-                    
-                    // Essayer plusieurs patterns pour extraire l'auteur
-                    const authorPatterns = [
-                        /d[e']?\s+([\w\s\.\-]+)(\s+-|$)/i,  // "de Victor Hugo - Fiche"
-                        /par\s+([\w\s\.\-]+)(\s+|$)/i,      // "par Victor Hugo"
-                        /([\w\s\.\-]+)(\s+-\s+|$)/i         // "Victor Hugo - Fiche"
-                    ];
-                    
-                    let authorFound = false;
-                    for (const pattern of authorPatterns) {
-                        const match = subtitleText.match(pattern);
-                        if (match && match[1]) {
-                            author = match[1].trim();
-                            authorFound = true;
-                            debugLog(`Auteur extrait avec pattern: "${author}"`);
-                            break;
-                        }
-                    }
-                    
-                    if (!authorFound) {
-                        // Si aucun pattern ne correspond, utiliser tout le texte du sous-titre
-                        author = subtitleText;
-                        debugLog(`Utilisation du sous-titre complet comme auteur: "${author}"`);
-                    }
-                } else {
-                    // Chercher d'autres éléments qui pourraient contenir l'auteur
-                    const authorElement = doc.querySelector('[itemprop="author"]') || 
-                                        doc.querySelector('.author') ||
-                                        doc.querySelector('header em');
-                    if (authorElement) {
-                        author = authorElement.textContent.trim();
-                        debugLog(`Auteur trouvé via élément alternatif: "${author}"`);
-                    }
-                }
-                
-                // Extraction de la description - Améliorée
-                let description = 'Fiche de lecture détaillée avec résumé, contexte, personnages et analyse.';
-                
-                // Essayer plusieurs emplacements pour la description
-                const descriptionSelectors = [
-                    '#resume .highlight-box',
-                    '#resume p:first-of-type',
-                    '.resume p:first-of-type',
-                    '.description',
-                    'meta[name="description"]',
-                    '#introduction p:first-of-type',
-                    'article p:first-of-type'
-                ];
-                
-                for (const selector of descriptionSelectors) {
-                    const element = doc.querySelector(selector);
-                    if (element) {
-                        // Pour les meta tags, utiliser l'attribut content
-                        const content = element.tagName === 'META' 
-                            ? element.getAttribute('content')
-                            : element.textContent;
-                            
-                        if (content && content.trim().length > 20) {
-                            description = content.trim();
-                            debugLog(`Description trouvée via ${selector}: "${description.substring(0, 50)}..."`);
-                            break;
-                        }
-                    }
-                }
-                
-                // Valeurs par défaut si rien n'est trouvé
-                if (!title) {
-                    title = filename.replace('.html', '')
-                        .split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                    debugLog(`Titre par défaut: "${title}"`);
-                }
-                
-                if (!author) {
-                    debugLog(`Auteur non trouvé, utilisation de la valeur par défaut`);
-                    author = 'Auteur non spécifié';
-                }
-                
-                return {
-                    title,
-                    author,
-                    description,
-                    filename
-                };
-            }
-            
-            // Récupérer la liste des fichiers HTML depuis l'API GitHub - Améliorée avec plus de détails
-            async function fetchRepositoryFiles() {
-                debugLog('Récupération des fichiers depuis l\'API GitHub');
-                
-                // Vérifier si les paramètres GitHub sont configurés
-                if (!CONFIG.owner || !CONFIG.repo) {
-                    throw new Error("Configuration GitHub incomplète. Veuillez renseigner votre nom d'utilisateur et le nom du dépôt.");
-                }
-                
-                try {
-                    // Construire l'URL de l'API GitHub pour lister les fichiers
-                    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?ref=${CONFIG.branch}`;
-                    debugLog(`URL de l'API GitHub: ${apiUrl}`);
-                    
-                    // Ajouter un timestamp pour éviter les problèmes de cache
-                    const fetchUrl = apiUrl + `&_=${Date.now()}`;
-                    debugLog(`URL avec anti-cache: ${fetchUrl}`);
-                    
-                    const response = await fetch(fetchUrl, {
-                        headers: {
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        debugLog(`Erreur API GitHub (${response.status}): ${errorText}`);
-                        throw new Error(`Erreur API GitHub (${response.status}): ${errorText}`);
-                    }
-                    
-                    const files = await response.json();
-                    debugLog(`${files.length} fichiers trouvés dans le dépôt`);
-                    
-                    // Filtrer pour ne garder que les fichiers HTML
-                    const htmlFiles = files.filter(file => {
-                        // S'assurer que c'est un fichier et pas un dossier
-                        if (file.type !== 'file') {
-                            debugLog(`Ignoré: "${file.name}" (type: ${file.type})`);
-                            return false;
-                        }
-                        
-                        // Vérifier l'extension
-                        const hasValidExtension = CONFIG.extensions.some(ext => 
-                            file.name.toLowerCase().endsWith(ext.toLowerCase())
-                        );
-                        
-                        if (!hasValidExtension) {
-                            debugLog(`Ignoré: "${file.name}" (extension non valide)`);
-                            return false;
-                        }
-                        
-                        // Vérifier si le fichier est à exclure
-                        const isExcluded = CONFIG.excludeFiles.some(excluded => 
-                            file.name.toLowerCase() === excluded.toLowerCase()
-                        );
-                        
-                        if (isExcluded) {
-                            debugLog(`Ignoré: "${file.name}" (dans la liste d'exclusion)`);
-                            return false;
-                        }
-                        
-                        debugLog(`Fichier valide: "${file.name}"`);
-                        return true;
-                    });
-                    
-                    debugLog(`${htmlFiles.length} fichiers HTML valides trouvés`);
-                    
-                    // Si aucun fichier trouvé, afficher la liste complète des fichiers pour déboguer
-                    if (htmlFiles.length === 0 && files.length > 0) {
-                        debugLog('Liste complète des fichiers du dépôt:');
-                        files.forEach(file => {
-                            debugLog(`- ${file.name} (type: ${file.type})`);
-                        });
-                    }
-                    
-                    return htmlFiles;
-                    
-                } catch (error) {
-                    debugLog(`Erreur lors de la récupération depuis GitHub: ${error.message}`);
-                    throw error;
-                }
-            }
-            
-            // Récupérer le contenu de chaque fichier et extraire les informations - Améliorée avec plus de détails
-            async function processFiches() {
-                try {
-                    // Récupérer la liste des fichiers
-                    const files = await fetchRepositoryFiles();
-                    
-                    if (files.length === 0) {
-                        debugLog('Aucun fichier HTML valide trouvé dans le dépôt');
-                        return [];
-                    }
-                    
-                    // Traiter chaque fichier
-                    const fichePromises = files.map(async (file) => {
-                        try {
-                            debugLog(`Traitement de ${file.name}`);
-                            
-                            // Utiliser l'URL raw de GitHub pour récupérer le contenu
-                            // Format: https://raw.githubusercontent.com/OWNER/REPO/BRANCH/PATH
-                            const rawUrl = file.download_url;
-                            debugLog(`URL du contenu brut: ${rawUrl}`);
-                            
-                            // Ajouter anti-cache
-                            const fetchUrl = rawUrl + `?_=${Date.now()}`;
-                            
-                            const response = await fetch(fetchUrl, {
-                                method: 'GET',
-                                cache: 'no-store',
-                                headers: { 'Cache-Control': 'no-cache' }
-                            });
-                            
-                            if (!response.ok) {
-                                debugLog(`Erreur lors de la récupération de ${file.name}: ${response.status}`);
-                                return null;
-                            }
-                            
-                            const html = await response.text();
-                            debugLog(`Contenu de ${file.name} récupéré (${html.length} caractères)`);
-                            
-                            // Vérifier si le contenu récupéré est valide
-                            if (!html || html.length < 100) {
-                                debugLog(`Contenu de ${file.name} trop court ou invalide`);
-                                return null;
-                            }
-                            
-                            // Extraire les informations
-                            return await extractBookInfo(html, file.name);
-                            
-                        } catch (error) {
-                            debugLog(`Erreur lors du traitement de ${file.name}: ${error.message}`);
-                            return null;
-                        }
-                    });
-                    
-                    // Attendre que tous les traitements soient terminés
-                    const results = await Promise.all(fichePromises);
-                    
-                    // Filtrer les résultats null (erreurs)
-                    const validResults = results.filter(result => result !== null);
-                    debugLog(`${validResults.length} fiches valides traitées`);
-                    
-                    return validResults;
-                    
-                } catch (error) {
-                    debugLog(`Erreur générale: ${error.message}`);
-                    throw error;
-                }
-            }
-            
-            // Afficher les fiches trouvées - Améliorée avec plus d'informations
-            function displayFiches(fiches) {
-                const container = document.getElementById('fiches-container');
-                container.innerHTML = ''; // Effacer le message de chargement
-                
-                if (fiches.length === 0) {
-                    container.innerHTML = `
-                        <div class="error-message">
-                            <h3>Aucune fiche de lecture trouvée</h3>
-                            <p>Vérifiez les paramètres de configuration :</p>
-                            <ol style="text-align: left; margin: 15px 20px;">
-                                <li>Ouvrez ce fichier <code>index.html</code> et vérifiez les paramètres dans l'objet <code>CONFIG</code></li>
-                                <li>Assurez-vous que le nom d'utilisateur et le nom du dépôt sont corrects</li>
-                                <li>Vérifiez que vous avez bien des fichiers HTML dans votre dépôt</li>
-                                <li>Consultez les informations de débogage pour plus de détails sur l'erreur</li>
-                            </ol>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Trier les fiches par ordre alphabétique du titre
-                fiches.sort((a, b) => a.title.localeCompare(b.title, 'fr'));
-                
-                // Créer une carte pour chaque fiche
-                fiches.forEach(fiche => {
-                    const ficheElement = document.createElement('div');
-                    ficheElement.className = 'fiche-card';
-                    
-                    // Limiter la longueur de la description
-                    const description = fiche.description.length > 150 
-                        ? fiche.description.substring(0, 150) + '...' 
-                        : fiche.description;
-                    
-                    ficheElement.innerHTML = `
-                        <div class="fiche-header">
-                            <h2 class="fiche-title">${fiche.title}</h2>
-                            <div class="fiche-author">${fiche.author}</div>
-                        </div>
-                        <div class="fiche-content">
-                            <p class="fiche-description">${description}</p>
-                            <a href="${fiche.filename}" class="fiche-link">Consulter la fiche</a>
-                        </div>
-                    `;
-                    
-                    container.appendChild(ficheElement);
-                });
-                
-                // Ajouter un message indiquant le nombre de fiches
-                const countElement = document.createElement('div');
-                countElement.style.textAlign = 'center';
-                countElement.style.margin = '20px 0';
-                countElement.style.color = '#666';
-                countElement.innerHTML = `<p>${fiches.length} fiche${fiches.length > 1 ? 's' : ''} de lecture disponible${fiches.length > 1 ? 's' : ''}</p>`;
-                container.appendChild(countElement);
-                
-                debugLog(`${fiches.length} fiches affichées`);
-            }
-            
-            // Initialisation de la page - Améliorée avec plus de robustesse
-            async function init() {
-                try {
-                    debugLog('Initialisation de la page d\'index');
-                    debugLog(`Date et heure: ${new Date().toLocaleString()}`);
-                    debugLog(`Configuration: ${JSON.stringify(CONFIG, null, 2)}`);
-                    
-                    // Détecter si l'index est ouvert directement en local (file://)
-                    if (window.location.protocol === 'file:') {
-                        debugLog('Détection du protocole file:// - attention aux restrictions CORS');
-                    }
-                    
-                    // Détecter automatiquement les configurations GitHub Pages
-                    if (!CONFIG.owner || !CONFIG.repo) {
-                        // Tenter de déduire le propriétaire et le dépôt à partir de l'URL
-                        const githubPagesPattern = /https?:\/\/([^.]+)\.github\.io\/([^\/]+)/;
-                        const match = window.location.href.match(githubPagesPattern);
-                        
-                        if (match) {
-                            CONFIG.owner = match[1];
-                            CONFIG.repo = match[2];
-                            debugLog(`Configuration GitHub Pages détectée automatiquement: ${CONFIG.owner}/${CONFIG.repo}`);
-                        }
-                    }
-                    
-                    // Vérifier la connexion internet
-                    try {
-                        const testResponse = await fetch('https://api.github.com', { 
-                            method: 'HEAD',
-                            cache: 'no-store'
-                        });
-                        debugLog(`Test de connexion à GitHub: ${testResponse.status}`);
-                    } catch (e) {
-                        debugLog(`Erreur de connexion à GitHub: ${e.message}`);
-                    }
-                    
-                    const fiches = await processFiches();
-                    displayFiches(fiches);
-                    
-                } catch (error) {
-                    debugLog(`Erreur d'initialisation: ${error.message}`);
-                    debugLog(error.stack);
-                    
-                    const container = document.getElementById('fiches-container');
-                    container.innerHTML = `
-                        <div class="error-message">
-                            <h3>Erreur lors du chargement des fiches</h3>
-                            <p>${error.message}</p>
-                            <div style="margin-top: 15px; text-align: left;">
-                                <p><strong>Solutions possibles :</strong></p>
-                                <ul style="padding-left: 20px; margin-top: 10px;">
-                                    <li>Vérifiez que votre dépôt est <strong>public</strong> (l'API GitHub ne fonctionne qu'avec des dépôts publics sans authentification)</li>
-                                    <li>Vérifiez les paramètres de configuration du dépôt dans l'objet <code>CONFIG</code></li>
-                                    <li>Assurez-vous que GitHub Pages est correctement configuré</li>
-                                    <li>Consultez les informations de débogage pour plus de détails</li>
-                                </ul>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Afficher le bouton de débogage en cas d'erreur
-                    const toggleButton = document.getElementById('debug-toggle');
-                    if (toggleButton) {
-                        toggleButton.style.display = 'block';
-                        toggleButton.click(); // Ouvrir automatiquement les infos de débogage
-                    }
-                }
-            }
-            
-            // Démarrer après un court délai
-            setTimeout(init, 300);
-        });
-    </script>
+    <div class="fiche-card">
+        <div class="fiche-header">
+            <h2 class="fiche-title">Autant en emporte le vent</h2>
+            <div class="fiche-author">Margaret Mitchell</div>
+        </div>
+        <div class="fiche-content">
+            <p class="fiche-description">Roman américain monumental (1036 pages) publié en 1936, "Autant en emporte le vent" relate la chute de la société sudiste pendant et après la guerre d...</p>
+            <a href="autant-en-emporte-le-vent.html" class="fiche-link">Consulter la fiche</a>
+        </div>
+    </div>
+    
+    <div class="fiche-card">
+        <div class="fiche-header">
+            <h2 class="fiche-title">Cannibale</h2>
+            <div class="fiche-author">Didier Daeninckx</div>
+        </div>
+        <div class="fiche-content">
+            <p class="fiche-description">Un roman court (88 pages) qui raconte l'histoire vraie de Kanaks exposés comme des animaux lors de l'Exposition Coloniale de 1931 à Paris.</p>
+            <a href="cannibale.html" class="fiche-link">Consulter la fiche</a>
+        </div>
+    </div>
+    
+    <div class="fiche-card">
+        <div class="fiche-header">
+            <h2 class="fiche-title">La femme gelée</h2>
+            <div class="fiche-author">lecture</div>
+        </div>
+        <div class="fiche-content">
+            <p class="fiche-description">Un roman autobiographique (179 pages) qui raconte l'histoire d'une femme qui perd peu à peu sa liberté et ses aspirations en se conformant aux rôles t...</p>
+            <a href="la-femme-gelee.html" class="fiche-link">Consulter la fiche</a>
+        </div>
+    </div>
+    
+    <div class="fiche-card">
+        <div class="fiche-header">
+            <h2 class="fiche-title">Le Meilleur des Mondes</h2>
+            <div class="fiche-author">lecture</div>
+        </div>
+        <div class="fiche-content">
+            <p class="fiche-description">Le Meilleur des Mondes est un roman écrit par Aldous Huxley en 1932. L'histoire se déroule dans un futur où les humains sont produits en laboratoire s...</p>
+            <a href="meilleur-des-mondes.html" class="fiche-link">Consulter la fiche</a>
+        </div>
+    </div>
+    
+        </div>
+        <div style="text-align: center; margin: 20px 0; color: #666;">
+            <p>4 fiches de lecture disponibles</p>
+            <p><small>Dernière mise à jour: 04/05/2025 à 15:27</small></p>
+        </div>
+    </div>
 </body>
 </html>
