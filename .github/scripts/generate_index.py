@@ -173,7 +173,7 @@ for filename in html_files:
                 title = filename.replace('.html', '').replace('-', ' ').title()
                 print(f"Titre par défaut: {title}")
             
-             # Extraction de l'auteur
+            # Extraction de l'auteur
             author = 'Auteur non spécifié'
             subtitle = soup.find(class_='subtitle')
             if subtitle:
@@ -192,6 +192,44 @@ for filename in html_files:
                     if author_match:
                         author = author_match.group(1).strip()
                         print(f"Auteur extrait (alternative): {author}")
+            
+            # Extraction de la description
+            description = "Fiche de lecture détaillée"
+            
+            # Essayer plusieurs emplacements
+            selectors = [
+                '#resume .highlight-box', 
+                '#resume p:first-of-type',
+                '.resume p:first-of-type',
+                '.description',
+                'meta[name="description"]',
+                '#introduction p:first-of-type',
+                'article p:first-of-type',
+                'p:first-of-type'
+            ]
+            
+            for selector in selectors:
+                element = soup.select_one(selector)
+                if element:
+                    if element.name == 'meta':
+                        description = element.get('content', '')
+                    else:
+                        description = element.text.strip()
+                    
+                    if description and len(description) > 20:
+                        print(f"Description trouvée via {selector}")
+                        break
+            
+            fiches.append({
+                'filename': filename,
+                'title': title,
+                'author': author,
+                'description': description
+            })
+            print(f"Fiche ajoutée: {filename} - {title}")
+    except Exception as e:
+        print(f"Erreur lors du traitement de {filename}: {str(e)}")
+
 # Trier par titre
 fiches.sort(key=lambda x: x['title'])
 
