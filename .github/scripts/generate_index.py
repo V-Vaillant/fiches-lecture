@@ -174,21 +174,24 @@ for filename in html_files:
                 print(f"Titre par défaut: {title}")
             
             # Extraction de l'auteur
-            author = 'Auteur non spécifié'
-            subtitle = soup.find(class_='subtitle')
-            if subtitle:
-                subtitle_text = subtitle.text.strip()
-                print(f"Sous-titre trouvé: {subtitle_text}")
-                
-                # Chercher l'auteur avec des patterns améliorés
-                author_match = re.search(r"d[e']?\s+(.*?)(?:\s+-\s+Fiche|\s*$)", subtitle_text)
-                if author_match:
-                    author = author_match.group(1).strip()
-                    print(f"Auteur extrait: {author}")
-                else:
-                    # Si on ne trouve pas avec le pattern ci-dessus, on prend tout le sous-titre
-                    author = subtitle_text
-                    print(f"Sous-titre complet comme auteur: {author}")
+          author = 'Auteur non spécifié'
+subtitle = soup.find(class_='subtitle')
+if subtitle:
+    subtitle_text = subtitle.text.strip()
+    print(f"Sous-titre trouvé: {subtitle_text}")
+    
+    # Nouveau pattern plus robuste pour extraire l'auteur
+    if "d'" in subtitle_text or "de " in subtitle_text:
+        author_match = re.search(r"d['e]\s*([\w\s\.\-]+?)(?:\s+-|\s*$)", subtitle_text)
+        if author_match:
+            author = author_match.group(1).strip()
+            print(f"Auteur extrait: {author}")
+    else:
+        # Chercher avant "- Fiche"
+        author_match = re.search(r"([\w\s\.\-]+?)(?:\s+-\s+Fiche|\s*$)", subtitle_text)
+        if author_match:
+            author = author_match.group(1).strip()
+            print(f"Auteur extrait (alternative): {author}")
             
             # Extraction de la description
             description = "Fiche de lecture détaillée"
