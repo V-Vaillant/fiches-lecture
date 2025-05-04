@@ -2,16 +2,14 @@ import os
 import re
 import glob
 from bs4 import BeautifulSoup
+from datetime import datetime
 
-# Template HTML pour l'index
-INDEX_TEMPLATE = """<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index des fiches de lecture</title>
-    <style>
-       :root {{
+# Fichiers à exclure
+EXCLUDE_FILES = ['index.html', 'README.html', '404.html']
+
+# CSS séparé du template
+CSS = """
+:root {
     --primary-color: #6a1b9a;
     --secondary-color: #9c27b0;
     --accent-color: #e1bee7;
@@ -20,152 +18,132 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     --card-bg: #fff;
     --border-radius: 12px;
     --box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-}}
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.5;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .fiches-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        
-        .fiche-card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .fiche-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .fiche-header {
-            padding: 15px;
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .fiche-title {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-        }
-        
-        .fiche-author {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-style: italic;
-        }
-        
-        .fiche-content {
-            padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .fiche-description {
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-        
-        .fiche-link {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            align-self: flex-start;
-            transition: background-color 0.3s ease;
-        }
-        
-        .fiche-link:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        @media (max-width: 768px) {
-            .fiches-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 20px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Fiches de Lecture</h1>
-            <div class="subtitle">Oeuvres littéraires analysées</div>
-        </header>
-        <div class="fiches-container">
-            {fiches_html}
-        </div>
-        <div style="text-align: center; margin: 20px 0; color: #666;">
-            <p>{count_fiches}</p>
-            <p><small>Dernière mise à jour: {update_date}</small></p>
-        </div>
-    </div>
-</body>
-</html>"""
+}
 
-# Fichiers à exclure
-EXCLUDE_FILES = ['index.html', 'README.html', '404.html']
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.fiches-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.fiche-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fiche-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.fiche-header {
+    padding: 15px;
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.fiche-title {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.fiche-author {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+.fiche-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fiche-description {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.fiche-link {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+}
+
+.fiche-link:hover {
+    background-color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .fiches-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+}
+"""
 
 # Trouver toutes les fiches HTML
 html_files = glob.glob('*.html')
@@ -178,7 +156,6 @@ for filename in html_files:
         continue
         
     print(f"Traitement de {filename}")
-    # Extraire les informations de chaque fiche
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -203,19 +180,15 @@ for filename in html_files:
                 subtitle_text = subtitle.text.strip()
                 print(f"Sous-titre trouvé: {subtitle_text}")
                 
-                # Essayer plusieurs patterns
-                patterns = [
-                    r"d[e']?\s+([\w\s\.\-]+)(\s+-|$)",  # "de Victor Hugo - Fiche"
-                    r"par\s+([\w\s\.\-]+)(\s+|$)",      # "par Victor Hugo"
-                    r"([\w\s\.\-]+)(\s+-\s+|$)"         # "Victor Hugo - Fiche"
-                ]
-                
-                for pattern in patterns:
-                    match = re.search(pattern, subtitle_text)
-                    if match and match.group(1):
-                        author = match.group(1).strip()
-                        print(f"Auteur extrait: {author}")
-                        break
+                # Chercher l'auteur avec des patterns améliorés
+                author_match = re.search(r"d[e']?\s+(.*?)(?:\s+-\s+Fiche|\s*$)", subtitle_text)
+                if author_match:
+                    author = author_match.group(1).strip()
+                    print(f"Auteur extrait: {author}")
+                else:
+                    # Si on ne trouve pas avec le pattern ci-dessus, on prend tout le sous-titre
+                    author = subtitle_text
+                    print(f"Sous-titre complet comme auteur: {author}")
             
             # Extraction de la description
             description = "Fiche de lecture détaillée"
@@ -281,15 +254,35 @@ for fiche in fiches:
 count_fiches = f"{len(fiches)} fiche{'s' if len(fiches) > 1 else ''} de lecture disponible{'s' if len(fiches) > 1 else ''}"
 
 # Date de mise à jour
-from datetime import datetime
 update_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
 
-# Générer l'index final
-index_html = INDEX_TEMPLATE.format(
-    fiches_html=fiches_html,
-    count_fiches=count_fiches,
-    update_date=update_date
-)
+# Générer l'index final - sans utiliser format()
+index_html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index des fiches de lecture</title>
+    <style>
+{CSS}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fiches de Lecture</h1>
+            <div class="subtitle">Oeuvres littéraires analysées</div>
+        </header>
+        <div class="fiches-container">
+{fiches_html}
+        </div>
+        <div style="text-align: center; margin: 20px 0; color: #666;">
+            <p>{count_fiches}</p>
+            <p><small>Dernière mise à jour: {update_date}</small></p>
+        </div>
+    </div>
+</body>
+</html>"""
 
 # Écrire le fichier index.html
 with open('index.html', 'w', encoding='utf-8') as f:
