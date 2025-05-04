@@ -189,9 +189,30 @@
     </div>
 
     <script>
+        // Configuration des fiches de lecture
+        // ===================================
+        // Vous pouvez soit:
+        // 1. Laisser cette liste vide pour une détection automatique des fichiers (fonctionne sur la plupart des serveurs)
+        // 2. Ajouter manuellement les noms de vos fichiers HTML pour une détection garantie
+        const FICHES_DE_LECTURE = [
+            'femme-gelee.html',  // Exemple: La femme gelée
+            'cannibale.html',    // Exemple: Cannibale
+            // Ajoutez d'autres fiches ici au format 'nom-fichier.html',
+        ];
+        
+        // Code principal - ne pas modifier sauf si vous savez ce que vous faites
         document.addEventListener('DOMContentLoaded', function() {
+            const DEBUG = true; // Mettre à true pour voir les messages de débogage dans la console
+            
+            function debugLog(...args) {
+                if (DEBUG) {
+                    console.log('[Index Fiches]', ...args);
+                }
+            }
+            
             // Fonction pour extraire le titre et l'auteur d'une fiche de lecture HTML
             async function extractBookInfo(htmlContent, filename) {
+                debugLog(`Extraction des infos depuis ${filename}`);
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlContent, 'text/html');
                 
@@ -203,16 +224,20 @@
                 const h1Element = doc.querySelector('h1');
                 if (h1Element) {
                     title = h1Element.textContent.trim();
+                    debugLog(`Titre trouvé: "${title}"`);
                 }
                 
                 // Tenter d'extraire l'auteur depuis la sous-titre
                 const subtitleElement = doc.querySelector('.subtitle');
                 if (subtitleElement) {
                     const subtitleText = subtitleElement.textContent.trim();
-                    // Extraire l'auteur (généralement au format "de [Auteur] - Fiche de lecture")
-                    const authorMatch = subtitleText.match(/d[e']?\s+([\w\s]+)\s+-/i);
+                    debugLog(`Sous-titre trouvé: "${subtitleText}"`);
+                    
+                    // Extraire l'auteur (généralement au format "de/d' [Auteur] - Fiche de lecture")
+                    const authorMatch = subtitleText.match(/d[e']?\s+([\w\s\.\-]+)(\s+-|$)/i);
                     if (authorMatch && authorMatch[1]) {
                         author = authorMatch[1].trim();
+                        debugLog(`Auteur extrait: "${author}"`);
                     }
                 }
                 
@@ -222,94 +247,144 @@
                     const highlightBox = resumeSection.querySelector('.highlight-box');
                     if (highlightBox) {
                         description = highlightBox.textContent.trim();
+                        debugLog(`Description extraite de highlight-box: "${description.substring(0, 50)}..."`);
                     } else {
                         const firstParagraph = resumeSection.querySelector('p');
                         if (firstParagraph) {
                             description = firstParagraph.textContent.trim();
+                            debugLog(`Description extraite du premier paragraphe: "${description.substring(0, 50)}..."`);
                         }
                     }
                 }
                 
+                // Valeurs par défaut si rien n'est trouvé
+                if (!title) {
+                    title = filename.replace('.html', '')
+                        .split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    debugLog(`Titre par défaut: "${title}"`);
+                }
+                
+                if (!author) {
+                    debugLog(`Auteur non trouvé, utilisation de la valeur par défaut`);
+                    author = 'Auteur inconnu';
+                }
+                
                 return {
-                    title: title || filename.replace('.html', ''),
-                    author: author || 'Auteur inconnu',
-                    description: description,
-                    filename: filename
+                    title,
+                    author,
+                    description,
+                    filename
                 };
             }
             
             // Fonction pour récupérer et scanner les fichiers HTML du répertoire
             async function scanHtmlFiles() {
+                // 1. Si la liste manuelle est remplie, l'utiliser directement
+                if (FICHES_DE_LECTURE.length > 0) {
+                    debugLog(`Utilisation de la liste manuelle de ${FICHES_DE_LECTURE.length} fiches`);
+                    return processFileList(FICHES_DE_LECTURE);
+                }
+                
+                // 2. Sinon, tenter la détection automatique
+                debugLog(`Tentative de détection automatique des fichiers HTML`);
                 try {
                     // Récupérer la liste des fichiers dans le répertoire actuel
                     const response = await fetch('.');
                     const html = await response.text();
+                    debugLog(`Contenu du répertoire récupéré (${html.length} caractères)`);
                     
-                    // Extraire les liens vers les fichiers HTML
+                    // Rechercher tous les liens vers des fichiers HTML
+                    const htmlFileRegex = /href="([^"]+\.html)"/g;
+                    let match;
+                    const htmlFiles = [];
+                    
+                    while ((match = htmlFileRegex.exec(html)) !== null) {
+                        const filename = match[1];
+                        if (filename !== 'index.html' && !filename.includes('/') && 
+                            !filename.startsWith('?') && !filename.startsWith('#')) {
+                            htmlFiles.push(filename);
+                            debugLog(`Fichier HTML trouvé: ${filename}`);
+                        }
+                    }
+                    
+                    if (htmlFiles.length > 0) {
+                        debugLog(`${htmlFiles.length} fichiers HTML trouvés automatiquement`);
+                        return processFileList(htmlFiles);
+                    }
+                    
+                    // Si aucun fichier trouvé, essayer une autre méthode
+                    debugLog(`Aucun fichier trouvé avec la méthode regex. Tentative avec DOM`);
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     
-                    // Configuration pour différents serveurs
-                    // Apache/Nginx directoryListing
-                    let links = Array.from(doc.querySelectorAll('a[href]'));
+                    let links = Array.from(doc.querySelectorAll('a[href]'))
+                        .filter(link => {
+                            const href = link.getAttribute('href');
+                            return href.endsWith('.html') && 
+                                  href !== 'index.html' && 
+                                  !href.includes('/') && 
+                                  !href.startsWith('?') &&
+                                  !href.startsWith('#');
+                        })
+                        .map(link => link.getAttribute('href'));
                     
-                    // Filtrer pour ne garder que les fichiers HTML
-                    links = links.filter(link => {
-                        const href = link.getAttribute('href');
-                        return href.endsWith('.html') && 
-                               href !== 'index.html' && 
-                               !href.includes('/') && 
-                               !href.startsWith('?') &&
-                               !href.startsWith('#');
-                    });
-                    
-                    // Si aucun lien HTML trouvé, tenter une méthode alternative
-                    if (links.length === 0) {
-                        // Essayer d'analyser différents formats de listing
-                        // Recherche de modèles dans le HTML brut
-                        const htmlFileRegex = /href="([^"]+\.html)"/g;
-                        let match;
-                        const htmlFiles = [];
-                        
-                        while ((match = htmlFileRegex.exec(html)) !== null) {
-                            const filename = match[1];
-                            if (filename !== 'index.html' && !filename.includes('/') && !filename.startsWith('?')) {
-                                htmlFiles.push(filename);
-                            }
-                        }
-                        
-                        // Créer des objets liens à partir des noms de fichiers trouvés
-                        links = htmlFiles.map(filename => {
-                            return { getAttribute: () => filename };
-                        });
+                    if (links.length > 0) {
+                        debugLog(`${links.length} fichiers HTML trouvés avec la méthode DOM`);
+                        return processFileList(links);
                     }
                     
-                    const fichePromises = links.map(async (link) => {
-                        const filename = link.getAttribute('href');
-                        try {
-                            // Récupérer le contenu de chaque fichier HTML
-                            const response = await fetch(filename);
-                            const html = await response.text();
-                            
-                            // Extraire les informations du livre
-                            return await extractBookInfo(html, filename);
-                        } catch (error) {
-                            console.error(`Erreur lors du traitement de ${filename}:`, error);
-                            return {
-                                title: filename.replace('.html', ''),
-                                author: 'Information non disponible',
-                                description: 'Impossible de charger les détails de cette fiche.',
-                                filename: filename
-                            };
-                        }
-                    });
+                    // Si toujours rien, utiliser une liste de noms courants pour tester
+                    debugLog(`Aucun fichier trouvé. Tentative avec des noms courants`);
+                    const commonNames = [
+                        'femme-gelee.html', 'la-femme-gelee.html', 
+                        'cannibale.html', 
+                        'etranger.html', 'l-etranger.html',
+                        'candide.html', 
+                        'germinal.html',
+                        'peste.html', 'la-peste.html',
+                        'madame-bovary.html'
+                    ];
                     
-                    return await Promise.all(fichePromises);
+                    return processFileList(commonNames);
                     
                 } catch (error) {
-                    console.error('Erreur lors du scan des fichiers HTML:', error);
-                    throw error;
+                    debugLog(`Erreur lors de la détection automatique: ${error.message}`);
+                    throw new Error(`Impossible de détecter automatiquement les fiches. ${error.message}`);
                 }
+            }
+            
+            // Traiter une liste de noms de fichiers et récupérer leurs infos
+            async function processFileList(fileList) {
+                debugLog(`Traitement de ${fileList.length} fichiers`);
+                
+                // Tester chaque fichier pour voir s'il existe et extraire ses informations
+                const fichePromises = fileList.map(async (filename) => {
+                    try {
+                        debugLog(`Tentative de récupération de ${filename}`);
+                        const response = await fetch(filename, { method: 'GET' });
+                        
+                        if (!response.ok) {
+                            debugLog(`Fichier ${filename} introuvable (${response.status})`);
+                            return null;
+                        }
+                        
+                        const html = await response.text();
+                        debugLog(`Fichier ${filename} récupéré (${html.length} caractères)`);
+                        
+                        // Extraire les informations du livre
+                        return await extractBookInfo(html, filename);
+                    } catch (error) {
+                        debugLog(`Erreur lors du traitement de ${filename}: ${error.message}`);
+                        return null;
+                    }
+                });
+                
+                // Attendre toutes les promesses et filtrer les résultats nuls
+                const results = await Promise.all(fichePromises);
+                const validResults = results.filter(result => result !== null);
+                
+                debugLog(`${validResults.length} fiches valides trouvées sur ${fileList.length} testées`);
+                return validResults;
             }
             
             // Fonction pour afficher les fiches de lecture
@@ -318,10 +393,16 @@
                 container.innerHTML = ''; // Effacer le message de chargement
                 
                 if (fiches.length === 0) {
+                    debugLog(`Aucune fiche à afficher`);
                     container.innerHTML = `
                         <div class="error-message">
                             <h3>Aucune fiche de lecture trouvée</h3>
-                            <p>Veuillez ajouter des fiches de lecture HTML dans ce répertoire.</p>
+                            <p>Vous pouvez ajouter vos fiches de lecture en suivant ces étapes :</p>
+                            <ol style="text-align: left; margin: 15px 20px;">
+                                <li>Placez vos fichiers HTML de fiches de lecture dans ce même dossier</li>
+                                <li>Si la détection automatique ne fonctionne pas, ouvrez ce fichier et ajoutez manuellement les noms des fichiers dans la variable <code>FICHES_DE_LECTURE</code> au début du script</li>
+                                <li>Assurez-vous que les fiches HTML ont la même structure avec un titre H1, une classe .subtitle et une section #resume</li>
+                            </ol>
                         </div>
                     `;
                     return;
@@ -348,73 +429,39 @@
                     
                     container.appendChild(ficheElement);
                 });
+                
+                debugLog(`${fiches.length} fiches affichées`);
             }
             
             // Fonction principale pour initialiser la page
             async function init() {
                 try {
+                    debugLog('Initialisation de la page d\'index');
                     const fiches = await scanHtmlFiles();
                     displayFiches(fiches);
                 } catch (error) {
-                    console.error('Erreur d\'initialisation:', error);
+                    debugLog(`Erreur d'initialisation: ${error.message}`);
                     const container = document.getElementById('fiches-container');
                     container.innerHTML = `
                         <div class="error-message">
                             <h3>Erreur lors du chargement des fiches</h3>
-                            <p>Impossible de récupérer la liste des fiches de lecture. ${error.message}</p>
-                            <p>Si vous exécutez ce fichier localement, veuillez l'ouvrir via un serveur web.</p>
+                            <p>Impossible de récupérer la liste des fiches de lecture : ${error.message}</p>
+                            <div style="margin-top: 15px; text-align: left;">
+                                <p><strong>Solutions possibles :</strong></p>
+                                <ul style="padding-left: 20px; margin-top: 10px;">
+                                    <li>Si vous exécutez ce fichier localement, ouvrez-le via un serveur web</li>
+                                    <li>Ajoutez manuellement les noms de fichiers dans la variable <code>FICHES_DE_LECTURE</code> au début du script</li>
+                                    <li>Vérifiez les permissions d'accès aux fichiers sur votre serveur</li>
+                                    <li>Ouvrez la console de développement (F12) pour voir les messages d'erreur détaillés</li>
+                                </ul>
+                            </div>
                         </div>
                     `;
                 }
             }
             
-            // Méthode alternative si la précédente échoue
-            function fallbackMethod() {
-                // Liste des noms de fichiers connus (méthode statique de secours)
-                // À modifier manuellement si nécessaire, mais cette solution n'est qu'un dernier recours
-                const knownHtmlFiles = [
-                    'cannibale.html',
-                    'femme-gelee.html'
-                    // Ajoutez d'autres fiches connues ici
-                ];
-                
-                Promise.all(knownHtmlFiles.map(async (filename) => {
-                    try {
-                        const response = await fetch(filename);
-                        const html = await response.text();
-                        return await extractBookInfo(html, filename);
-                    } catch (error) {
-                        console.error(`Erreur lors du traitement de ${filename}:`, error);
-                        return {
-                            title: filename.replace('.html', ''),
-                            author: 'Information non disponible',
-                            description: 'Impossible de charger les détails de cette fiche.',
-                            filename: filename
-                        };
-                    }
-                }))
-                .then(fiches => {
-                    displayFiches(fiches);
-                })
-                .catch(error => {
-                    console.error('Erreur avec la méthode de secours:', error);
-                    const container = document.getElementById('fiches-container');
-                    container.innerHTML = `
-                        <div class="error-message">
-                            <h3>Toutes les méthodes de chargement ont échoué</h3>
-                            <p>Veuillez vérifier la configuration de votre serveur web.</p>
-                        </div>
-                    `;
-                });
-            }
-            
-            // Lancer l'initialisation avec délai pour permettre à la page de s'afficher
-            setTimeout(() => {
-                init().catch(() => {
-                    console.log("Méthode principale échouée, essai de la méthode de secours");
-                    fallbackMethod();
-                });
-            }, 500);
+            // Lancer l'initialisation avec un délai pour permettre à la page de s'afficher
+            setTimeout(init, 500);
         });
     </script>
 </body>
